@@ -528,6 +528,11 @@
             );
 
             const data = await response.json();
+            if (data.message==="Not Found"){
+                document.getElementById("result").innerHTML="User Not Found";
+                return;
+
+            }
 
             document.getElementById("result").innerHTML =
             `
