@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncLogue // Work Intelligence Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        espresso: '#2B1E17',
+                        clay: '#6E5544',
+                        biscuit: '#AF9B8D',
+                        cream: '#F9F6F0',
+                        parchment: '#F2EDE4',
+                        accentGreen: '#4A5D4E',
+                        accentAmber: '#A87C43'
+                    },
+                    fontFamily: {
+                        sans: ['Cabinet Grotesk', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&display=swap');
+        body {
+            background-color: #F9F6F0;
+            color: #2B1E17;
+            font-family: 'Inter', sans-serif;
+        }
+        .heading-font {
+            font-family: 'Cabinet Grotesk', sans-serif;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F9F6F0; }
+        ::-webkit-scrollbar-thumb { background: #AF9B8D; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6E5544; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+    <div style="padding:20px; background:white;">
+        <input 
+            id="githubUser"
+            placeholder="Enter GitHub Username"
+            style="padding:10px;"
+        >
+
+        <button onclick="fetchGitHubData()">
+         Fetch GitHub Data
+        </button>
+
+        <p id="result"></p>
+
+    </div>
+    <div id="authGate" class="fixed inset-0 bg-espresso/40 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-cream border border-clay/20 w-full max-w-md p-8 rounded-2xl shadow-2xl transition-all">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center p-3 bg-parchment rounded-xl mb-3 text-clay">
+                    <i data-lucide="layers" class="w-8 h-8"></i>
+                </div>
+                <h1 class="heading-font text-3xl font-bold tracking-tight text-espresso">SyncLogue</h1>
+                <p class="text-sm text-clay mt-1">AI Workplace Intelligence Layer</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider font-semibold text-clay mb-1">Select Active Simulation Identity</label>
+                    <select id="roleSelector" class="w-full bg-parchment border border-clay/30 rounded-lg px-4 py-3 text-espresso focus:outline-none focus:border-espresso transition-all font-medium">
+                        <option value="developer">Lead Developer / Core Contributor View</option>
+                        <option value="admin">HR / Team Lead / Admin Intelligence View</option>
+                    </select>
+                </div>
+                <div class="p-3 bg-parchment/60 rounded-lg border border-clay/10 text-xs text-clay/80 leading-relaxed">
+                    <i data-lucide="info" class="w-4 h-4 inline mr-1 -mt-0.5 text-accentAmber"></i>
+                    <strong>Role-Based Access Simulation:</strong> Switching profiles shifts workspace telemetry from personal Proof-of-Work to cross-team optimization maps.
+                </div>
+                <button onclick="loginSimulation()" class="w-full bg-espresso text-cream hover:bg-clay font-medium py-3 rounded-lg shadow transition-all duration-150 flex items-center justify-center gap-2">
+                    Access Workspace Intelligence <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="flex-1 flex flex-col opacity-20 transition-all duration-500" id="mainAppLayout">
+        
+        <header class="border-b border-clay/10 bg-cream/80 backdrop-blur sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-espresso text-cream rounded-lg">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <span class="heading-font text-xl font-bold tracking-tight text-espresso">SyncLogue</span>
+                    <span class="ml-2 text-xs bg-parchment text-clay px-2 py-0.5 rounded-full font-medium uppercase tracking-wider border border-clay/10">MVP v1.0</span>
+                </div>
+            </div>
+
+          
+            <div class="hidden md:flex items-center gap-6 text-xs text-clay">
+                <div class="flex items-center gap-2 bg-parchment/50 px-3 py-1.5 rounded-lg border border-clay/10">
+                    <span class="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span>
+                    <i data-lucide="github" class="w-3.5 h-3.5"></i>
+                    <span>GitHub Pipeline Active</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                    <span id="workspaceInfoText">Workspace: Engine-Room // Core</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div class="text-right">
+                    <p id="userNameBadge" class="text-sm font-semibold text-espresso">Keerthana Ramalingam</p>
+                    <p id="userRoleBadge" class="text-xs text-clay capitalize">Lead Developer</p>
+                </div>
+                <button onclick="logoutSimulation()" class="p-2 hover:bg-parchment rounded-lg text-clay transition-colors" title="Change Role Identity">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </header>
+        <section class="bg-parchment/40 border-b border-clay/10 px-6 py-2.5 flex flex-wrap justify-between items-center gap-4 text-xs text-clay">
+            <div>
+                <span class="font-bold uppercase tracking-wider text-[10px] text-accentAmber mr-1">Positioning Masterclass:</span>
+                <span class="italic">“AI-powered workplace intelligence tracking impact beyond commits without toxic monitoring.”</span>
+            </div>
+            <div class="flex gap-4 font-medium">
+                <span class="flex items-center gap-1 text-espresso"><i data-lucide="check-circle-2" class="w-3 h-3 text-accentGreen"></i> Silent Recognition Enforced</span>
+                <span class="flex items-center gap-1 text-espresso"><i data-lucide="shield" class="w-3 h-3 text-accentGreen"></i> Proof-of-Work Crypt-Verified</span>
+            </div>
+        </section>
+
+        <main class="flex-1 p-6 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+          
+            <div class="lg:col-span-8 space-y-6">
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-cream border border-clay/20 p-4 rounded-xl shadow-sm">
+                        <p class="text-xs text-clay uppercase tracking-wider font-semibold">Intelligence Score</p>
+                        <h3 class="heading-font text-2xl font-bold text-espresso mt-1" id="metricScore">94<span class="text-xs text-accentGreen ml-1">▲ 4%</span></h3>
+                        <p class="text-[10px] text-clay/80 mt-1">Weighted Quality / Activity Metric</p>
+                    </div>
+                    <div class="bg-cream border border-clay/20 p-4 rounded-xl shadow-sm">
+                        <p class="text-xs text-clay uppercase tracking-wider font-semibold">Silent Contributions</p>
+                        <h3 class="heading-font text-2xl font-bold text-espresso mt-1" id="metricSilent">42 Units</h3>
+                        <p class="text-[10px] text-clay/80 mt-1">Reviews, mentorship, syncs</p>
+                    </div>
+                    <div class="bg-cream border border-clay/20 p-4 rounded-xl shadow-sm">
+                        <p class="text-xs text-clay uppercase tracking-wider font-semibold">Workload Status</p>
+                        <h3 class="heading-font text-xl font-bold text-accentGreen mt-1.5" id="metricWorkload">Optimal Balance</h3>
+                        <p class="text-[10px] text-clay/80 mt-1">Burnout risk factor: Minimal</p>
+                    </div>
+                    <div class="bg-cream border border-clay/20 p-4 rounded-xl shadow-sm">
+                        <p class="text-xs text-clay uppercase tracking-wider font-semibold">Streak Engine</p>
+                        <h3 class="heading-font text-2xl font-bold text-accentAmber mt-1" id="metricStreak">12 Days </h3>
+                        <p class="text-[10px] text-clay/80 mt-1">High consistency timeline</p>
+                    </div>
+                </div>
+
+                <div id="developerContextView" class="space-y-6">
+                    <div class="bg-cream border border-clay/20 rounded-xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="heading-font text-lg font-bold text-espresso">Productivity Tracking Engine (GitHub Direct)</h2>
+                                <p class="text-xs text-clay">Real-time source code mapping interpreted by SyncLogue AI context parser</p>
+                            </div>
+                            <span class="text-xs text-accentGreen font-mono bg-parchment px-2 py-1 rounded">Live Webhooks Active</span>
+                        </div>
+                        
+                        <div class="bg-parchment/50 border border-clay/10 p-4 rounded-lg mb-6 flex flex-wrap items-center justify-between gap-4">
+                            <div class="text-xs text-clay">
+                                <strong>Interactive Simulation Matrix:</strong> Fire actions here to update platform tracking intelligence instantly.
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="injectTelemetry('commit')" class="bg-espresso text-cream hover:bg-clay text-xs px-3 py-1.5 rounded transition-all font-medium flex items-center gap-1">
+                                    <i data-lucide="git-commit" class="w-3.5 h-3.5"></i> Push Commit (+5)
+                                </button>
+                                <button onclick="injectTelemetry('pr')" class="bg-espresso text-cream hover:bg-clay text-xs px-3 py-1.5 rounded transition-all font-medium flex items-center gap-1">
+                                    <i data-lucide="git-pull-request" class="w-3.5 h-3.5"></i> Merge PR (+10)
+                                </button>
+                                <button onclick="injectTelemetry('silent')" class="bg-clay text-cream hover:bg-espresso text-xs px-3 py-1.5 rounded transition-all font-medium flex items-center gap-1">
+                                    <i data-lucide="message-square-code" class="w-3.5 h-3.5"></i> Silent Peer Assist (+7)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-xs text-clay mb-1">
+                                    <span>AI Interpretation Confidence Score</span>
+                                    <span class="font-bold text-espresso">98.2%</span>
+                                </div>
+                                <div class="w-full bg-parchment h-2 rounded-full overflow-hidden">
+                                    <div class="bg-espresso h-full rounded-full transition-all duration-500" style="width: 98.2%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="border border-clay/10 rounded-lg overflow-hidden bg-parchment/20 text-xs">
+                                <div class="bg-parchment/60 px-3 py-2 border-b border-clay/10 font-medium text-espresso flex justify-between">
+                                    <span>Captured Workspace Event Streams</span>
+                                    <span>Weight Multiplier</span>
+                                </div>
+                                <div id="telemetryLogStream" class="divide-y divide-clay/5 max-h-[180px] overflow-y-auto">
+                                    <div class="p-3 flex justify-between items-center bg-cream/40">
+                                        <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-accentGreen"></i> Fixed memory pointer leak inside C-struct buffer wrapper</span>
+                                        <span class="font-mono text-espresso font-semibold bg-parchment px-1.5 py-0.5 rounded text-[10px]">+8 Bug Resolution</span>
+                                    </div>
+                                    <div class="p-3 flex justify-between items-center">
+                                        <span class="flex items-center gap-2"><i data-lucide="eye" class="w-3.5 h-3.5 text-clay"></i> Reviewed PR #402: Spring Boot Architecture Data Layer Refactor</span>
+                                        <span class="font-mono text-espresso font-semibold bg-parchment px-1.5 py-0.5 rounded text-[10px]">+6 Silent Review</span>
+                                    </div>
+                                    <div class="p-3 flex justify-between items-center">
+                                        <span class="flex items-center gap-2"><i data-lucide="help-circle" class="w-3.5 h-3.5 text-accentAmber"></i> Spent 45m in Slack huddle pair-debugging configuration errors with junior dev</span>
+                                        <span class="font-mono text-espresso font-semibold bg-parchment px-1.5 py-0.5 rounded text-[10px]">+7 Silent Help (BIG USP)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-cream border border-clay/20 rounded-xl p-6 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h2 class="heading-font text-lg font-bold text-espresso">Verified Proof-of-Work Engine</h2>
+                                <p class="text-xs text-clay">Transform raw logs directly into secure, highly granular verified work intelligence portfolios.</p>
+                            </div>
+                            <button onclick="exportProofOfWork()" class="bg-accentGreen text-cream hover:bg-espresso text-xs font-semibold px-4 py-2.5 rounded-lg transition-all flex items-center justify-center gap-2 self-start shadow-sm">
+                                <i data-lucide="file-down" class="w-4 h-4"></i> Export Verified Portfolio
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="p-3 bg-parchment rounded-lg border border-clay/10">
+                                <div class="flex items-center gap-2 text-espresso font-medium text-xs">
+                                    <i data-lucide="linkedin" class="w-3.5 h-3.5"></i> LinkedIn Integration
+                                </div>
+                                <p class="text-[11px] text-clay mt-1">Inject dynamically refreshed, verified capability tokens directly into resume streams.</p>
+                            </div>
+                            <div class="p-3 bg-parchment rounded-lg border border-clay/10">
+                                <div class="flex items-center gap-2 text-espresso font-medium text-xs">
+                                    <i data-lucide="link" class="w-3.5 h-3.5"></i> Crypto-Signed URI
+                                </div>
+                                <p class="text-[11px] text-clay mt-1">Immutable public proof-of-work link ideal for onboarding or hiring checks.</p>
+                            </div>
+                            <div class="p-3 bg-parchment rounded-lg border border-clay/10">
+                                <div class="flex items-center gap-2 text-espresso font-medium text-xs">
+                                    <i data-lucide="award" class="w-3.5 h-3.5"></i> Skill-Syllabus Mapping
+                                </div>
+                                <p class="text-[11px] text-clay mt-1">Automatically highlights core specialities backed by real execution logs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="adminContextView" class="space-y-6 hidden">
+                    
+                    <div class="bg-cream border border-clay/20 rounded-xl p-6 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h2 class="heading-font text-lg font-bold text-espresso">Workload Balancing & Team Burnout Telemetry</h2>
+                                <p class="text-xs text-clay">AI-powered team safety optimization metrics monitoring ecosystem velocity vs mental stress vectors.</p>
+                            </div>
+                            <span class="text-xs bg-red-100 text-red-800 font-medium px-2 py-1 rounded border border-red-200">1 Risk Alert</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div class="border border-clay/10 p-3 rounded-lg bg-parchment/30">
+                                <span class="text-xs font-semibold uppercase text-clay block mb-2">Sprint Pressure Distribution Heatmap</span>
+                                <div class="space-y-2 text-xs">
+                                    <div>
+                                        <div class="flex justify-between mb-0.5"><span>Frontend Ecosystem Team</span> <span class="font-mono">82% (High Pressure)</span></div>
+                                        <div class="w-full bg-parchment h-1.5 rounded-full"><div class="bg-accentAmber h-full" style="width: 82%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-0.5"><span>Core Backend Engine Team</span> <span class="font-mono">48% (Optimal)</span></div>
+                                        <div class="w-full bg-parchment h-1.5 rounded-full"><div class="bg-accentGreen h-full" style="width: 48%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-0.5"><span>QA / Continuous Integration Pipelines</span> <span class="font-mono">21% (Underutilized)</span></div>
+                                        <div class="w-full bg-parchment h-1.5 rounded-full"><div class="bg-clay h-full" style="width: 21%"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border border-clay/10 p-3 rounded-lg bg-parchment/30 text-xs flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs font-semibold uppercase text-clay block mb-1">AI Smart Suggestions Engine</span>
+                                    <p class="text-clay/90 leading-relaxed text-[11px]">
+                                        <strong class="text-espresso">Detection:</strong> Continuous late-night commit behaviors detected in Frontend Framework clusters over 4 consecutive calendar days.
+                                    </p>
+                                </div>
+                                <div class="bg-cream p-2 rounded border border-clay/10 flex items-center justify-between mt-2">
+                                    <span class="text-[11px] text-espresso italic">Suggested: Reallocate 3 critical frontend tickets to Core Backup Contributors</span>
+                                    <button class="bg-espresso text-cream text-[10px] px-2 py-1 rounded hover:bg-clay transition-colors">Deploy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-cream border border-clay/20 rounded-xl p-6 shadow-sm">
+                        <h2 class="heading-font text-lg font-bold text-espresso mb-1">Team & Departmental Workspace Settings</h2>
+                        <p class="text-xs text-clay mb-4">Provision enterprise nodes, handle access rulesets, and manage high-level org parameters.</p>
+                        
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
+                            <button class="p-3 bg-parchment hover:bg-clay hover:text-cream border border-clay/10 rounded-lg font-medium transition-all">
+                                <i data-lucide="plus-circle" class="w-4 h-4 mx-auto mb-1"></i> New Sub-Team
+                            </button>
+                            <button class="p-3 bg-parchment hover:bg-clay hover:text-cream border border-clay/10 rounded-lg font-medium transition-all">
+                                <i data-lucide="user-plus" class="w-4 h-4 mx-auto mb-1"></i> Outbound Invite
+                            </button>
+                            <button class="p-3 bg-parchment hover:bg-clay hover:text-cream border border-clay/10 rounded-lg font-medium transition-all">
+                                <i data-lucide="network" class="w-4 h-4 mx-auto mb-1"></i> Org Topology
+                            </button>
+                            <button class="p-3 bg-parchment hover:bg-clay hover:text-cream border border-clay/10 rounded-lg font-medium transition-all">
+                                <i data-lucide="sliders" class="w-4 h-4 mx-auto mb-1"></i> Compliance Keys
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-cream border border-clay/20 rounded-xl p-6 shadow-sm">
+                    <h2 class="heading-font text-base font-bold text-espresso mb-3">SyncLogue Unfair Value Advantage Index</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-parchment text-espresso uppercase font-semibold text-[10px] tracking-wider border-b border-clay/10">
+                                    <th class="p-3">Existing Tools Suite</th>
+                                    <th class="p-3">Operational Framework Scope</th>
+                                    <th class="p-3 text-clay font-bold">The SyncLogue Absolute Difference</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-clay/10">
+                                <tr>
+                                    <td class="p-3 font-medium text-espresso">GitHub Insights / Jira Analytics</td>
+                                    <td class="p-3 text-clay">Fragments metadata logs independently without semantic structure.</td>
+                                    <td class="p-3 bg-parchment/30 text-espresso font-medium">Fuses raw workflows into holistic, AI-interpreted contribution metrics.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium text-espresso">Slack / Microsoft Teams</td>
+                                    <td class="p-3 text-clay">Manages context communication but ignores engineering output quality.</td>
+                                    <td class="p-3 bg-parchment/30 text-espresso font-medium">Extracts "Silent Value" like active mentorship and peer debug help.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium text-espresso">Hubstaff / Legacy Work-Trackers</td>
+                                    <td class="p-3 text-clay">Relies on toxic, invasive desktop screenshot and click logging.</td>
+                                    <td class="p-3 bg-parchment/30 text-espresso font-medium">Zero intrusive capturing. Tracks raw functional output impact value.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="lg:col-span-4 space-y-6">
+                
+                <div class="bg-cream border border-clay/20 p-4 rounded-xl shadow-sm">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="toggle-left" class="w-4 h-4 text-accentAmber"></i>
+                        <span class="text-xs font-bold uppercase tracking-wider text-espresso">Interactive Simulator Controls</span>
+                    </div>
+                    <p class="text-[11px] text-clay leading-relaxed mb-3">
+                        Swap execution states instantly below to see how SyncLogue alters interface layout modules seamlessly between individual contributors and admin pipelines.
+                    </p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="toggleBtnDev" onclick="swapToRole('developer')" class="text-xs font-semibold py-2 px-3 rounded border bg-espresso text-cream transition-all">Developer View</button>
+                        <button id="toggleBtnAdmin" onclick="swapToRole('admin')" class="text-xs font-semibold py-2 px-3 rounded border bg-parchment border-clay/20 text-clay transition-all">Admin View</button>
+                    </div>
+                </div>
+
+                <div class="bg-cream border border-clay/20 rounded-xl p-4 shadow-sm flex flex-col h-[340px]">
+                    <div class="flex items-center gap-2 pb-3 border-b border-clay/10 mb-3">
+                        <div class="p-1.5 bg-espresso text-cream rounded">
+                            <i data-lucide="bot" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="heading-font text-sm font-bold text-espresso">SyncLogue AI Terminal</h3>
+                            <p class="text-[10px] text-clay">Contextual Workspace Intelligence Engine</p>
+                        </div>
+                    </div>
+
+                    <div id="aiChatWindowStream" class="flex-1 overflow-y-auto text-xs space-y-3 pr-1">
+                        <div class="bg-parchment/70 p-2.5 rounded-lg border border-clay/10 text-clay">
+                            Hello <span class="text-espresso font-semibold">Keerthana Ramalingam</span>. I hold context over current Git event queues, task states, and collaboration metrics. Click a prompt below to evaluate my engine output.
+                        </div>
+                    </div>
+
+                    <div class="mt-3 pt-3 border-t border-clay/5 space-y-1.5">
+                        <p class="text-[10px] uppercase tracking-wider font-semibold text-clay">Suggested Prompt Actions</p>
+                        <div class="flex flex-wrap gap-1">
+                            <button onclick="askAiAssistant('report')" class="text-[11px] text-espresso bg-parchment hover:bg-clay hover:text-cream px-2 py-1 rounded transition-colors text-left w-full truncate border border-clay/10">✨ "Generate my weekly summary narrative"</button>
+                            <button onclick="askAiAssistant('bottleneck')" class="text-[11px] text-espresso bg-parchment hover:bg-clay hover:text-cream px-2 py-1 rounded transition-colors text-left w-full truncate border border-clay/10">✨ "Who contributed most efficiently this sprint?"</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-cream border border-clay/20 rounded-xl p-4 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="heading-font text-sm font-bold text-espresso flex items-center gap-1.5">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-accentAmber"></i> Gamification & Badges
+                        </h3>
+                        <span class="text-[10px] bg-accentAmber/10 text-accentAmber px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Level 4</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-[11px] text-clay mb-1">
+                                <span>XP points to Level 5 Progression</span>
+                                <span class="font-bold text-espresso">740 / 1000 XP</span>
+                            </div>
+                            <div class="w-full bg-parchment h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-accentAmber h-full" style="width: 74%"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="p-2 bg-parchment/60 rounded border border-clay/10 flex items-center gap-1.5" title="Earned for deep debugging support session patterns">
+                                <span class="text-base"></span>
+                                <div>
+                                    <p class="font-semibold text-espresso leading-none text-[11px]">Bug Hunter</p>
+                                    <p class="text-[9px] text-clay">Core System</p>
+                                </div>
+                            </div>
+                            <div class="p-2 bg-parchment/60 rounded border border-clay/10 flex items-center gap-1.5" title="Earned for high documentation updates volumes">
+                                <span class="text-base"></span>
+                                <div>
+                                    <p class="font-semibold text-espresso leading-none text-[11px]">Doc Hero</p>
+                                    <p class="text-[9px] text-clay">Knowledge Hub</p>
+                                </div>
+                            </div>
+                            <div class="p-2 bg-parchment/60 rounded border border-clay/10 flex items-center gap-1.5" title="Maintained coding streak metrics target">
+                                <span class="text-base"></span>
+                                <div>
+                                    <p class="font-semibold text-espresso leading-none text-[11px]">Streak King</p>
+                                    <p class="text-[9px] text-clay">12 Days Solid</p>
+                                </div>
+                            </div>
+                            <div class="p-2 bg-parchment/60 rounded border border-clay/10 flex items-center gap-1.5 opacity-50" title="Locked: Requires 5 peer review completions this week">
+                                <span class="text-base"></span>
+                                <div>
+                                    <p class="font-semibold text-espresso leading-none text-[11px]">Team Player</p>
+                                    <p class="text-[9px] text-clay">Locked Tier</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-cream border border-clay/20 rounded-xl p-4 shadow-sm text-xs">
+                    <h4 class="font-bold text-espresso uppercase tracking-wider text-[10px] mb-2 text-clay">Pipeline Integration Mapping</h4>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-espresso text-cream rounded font-mono text-[10px]">GitHub [Active]</span>
+                        <span class="px-2 py-0.5 bg-parchment text-clay rounded font-mono text-[10px] opacity-60">Jira [Q3]</span>
+                        <span class="px-2 py-0.5 bg-parchment text-clay rounded font-mono text-[10px] opacity-60">Linear [Q3]</span>
+                        <span class="px-2 py-0.5 bg-parchment text-clay rounded font-mono text-[10px] opacity-60">Slack [Q4]</span>
+                        <span class="px-2 py-0.5 bg-parchment text-clay rounded font-mono text-[10px] opacity-60">VS Code [v2]</span>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <div id="proofOfWorkModal" class="fixed inset-0 bg-espresso/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-cream border-2 border-clay max-w-2xl w-full rounded-2xl shadow-2xl p-6 overflow-hidden flex flex-col max-h-[85vh]">
+                <div class="flex justify-between items-start border-b border-clay/20 pb-4 mb-4">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-widest text-accentGreen bg-accentGreen/10 px-2 py-0.5 rounded">Cryptographically Verified Portfolio</span>
+                        <h3 class="heading-font text-xl font-bold text-espresso mt-1">SyncLogue verified_impact_portfolio.pdf</h3>
+                    </div>
+                    <button onclick="closeModal()" class="p-1.5 hover:bg-parchment text-clay rounded-lg transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto space-y-4 p-2 bg-parchment/30 rounded-xl border border-clay/10 text-xs text-espresso font-mono leading-relaxed">
+                    <p class="text-center font-bold text-clay border-b border-dashed border-clay/20 pb-2">--- SYNCLOGUE ACCREDITED WORK TELEMETRY RECORD ---</p>
+                    <div>
+                        <strong>Contributed Identity Node:</strong>Keerthana Ramalingam<br>
+                        <strong>Assigned Engineering Speciality:</strong> Software Engineer // Backend & Infrastructure Pipeline Architecture
+                    </div>
+                    <hr class="border-clay/10">
+                    <div>
+                        <strong class="text-accentGreen">Verified Metrics Log Summaries (Past 14 Days):</strong><br>
+                        - Total Valid Non-Spam Production Commits: 28 Units<br>
+                        - Pull Request Ecosystem Implementations Merged: 6 Targets<br>
+                        - Code Quality Structural Review Matrix Verification: 14 Verifications
+                    </div>
+                    <div>
+                        <strong class="text-accentAmber">Silent Value System Contributions (Verified Beyond Commit Logs):</strong><br>
+                        - Cross-departmental Mentorship Intersect Events: 4 Traceable Incidents<br>
+                        - Technical System Wiki Documentation Enhancements: 8 Commits Checked
+                    </div>
+                    <hr class="border-clay/10">
+                    <div class="bg-cream p-3 rounded border border-clay/20">
+                        <span class="font-sans font-bold text-espresso text-[11px] block mb-1">AI Analytical Quality Interpretive Summary Statement</span>
+                        <p class="font-sans text-clay text-[11px] leading-relaxed">
+                            "The individual exhibits robust adherence to memory optimization protocols inside micro-service structural contexts. Manifests critical engineering habits through high levels of silent pull-request review activity, contributing value extensively to overall software team balance vectors."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-clay/20 flex justify-end gap-2">
+                    <button onclick="alert('Portfolio copied to operating system system clipboard as secure URI link token.')" class="px-4 py-2 text-xs font-semibold text-clay hover:bg-parchment rounded-lg border border-clay/20 transition-all">Copy Secure URI Link</button>
+                    <button onclick="window.print()" class="px-4 py-2 text-xs font-semibold bg-espresso text-cream hover:bg-clay rounded-lg transition-all">Download Signed PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="border-t border-clay/10 bg-parchment/30 px-6 py-4 text-center text-xs text-clay">
+            SyncLogue Workplace Intelligence System Matrix &copy; 2026. Custom Tailored for Engineering Teams Who Prioritize Real Contribution Value Metrics Over Crude Lines of Code Tracking.
+        </footer>
+    </div>
+
+    <script>
+
+        async function fetchGitHubData() {
+
+            const username =
+                document.getElementById("githubUser").value;
+
+            const response = await fetch(
+                `http://127.0.0.1:8000/github/${username}`
+            );
+
+            const data = await response.json();
+            document.getElementById("metricScore").innerHTML=data.public_repos;
+            document.getElementById("metricSilent").innerHTML =data.followers + " Followers";
+            document.getElementById("metricStreak").innerHTML =data.following + " Following";
+
+            if (data.message==="Not Found"){
+                document.getElementById("result").innerHTML="User Not Found";
+                return;
+
+            }
+
+            document.getElementById("result").innerHTML =
+            `
+                Name: ${data.name} <br>
+                Followers: ${data.followers} <br>
+                Public Repos: ${data.public_repos}
+                `;
+        }
+    
+        // Reactive Core Internal Telemetry State Values
+        let telemetryState = {
+            activeRole: 'developer',
+            intelligenceScore: 94,
+            silentUnits: 42,
+            streakDays: 12,
+            commitCountSimulated: 0
+        };
+
+        // Application Gate Boot Systems
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+
+        function loginSimulation() {
+            const chosenRole = document.getElementById('roleSelector').value;
+            swapToRole(chosenRole);
+            
+            // UI Element Access Shifts Animations
+            document.getElementById('authGate').classList.add('hidden');
+            const mainApp = document.getElementById('mainAppLayout');
+            mainApp.classList.remove('opacity-20');
+        }
+
+        function logoutSimulation() {
+            document.getElementById('authGate').classList.remove('hidden');
+            document.getElementById('mainAppLayout').classList.add('opacity-20');
+        }
+
+        function swapToRole(role) {
+            telemetryState.activeRole = role;
+            
+            // UI Component Elements Nodes
+            const devViewNode = document.getElementById('developerContextView');
+            const adminViewNode = document.getElementById('adminContextView');
+            const roleBadgeNode = document.getElementById('userRoleBadge');
+            const workspaceInfoText = document.getElementById('workspaceInfoText');
+
+            // Button Highlight Shifts 
+            const devBtn = document.getElementById('toggleBtnDev');
+            const adminBtn = document.getElementById('toggleBtnAdmin');
+
+            if(role === 'admin') {
+                devViewNode.classList.add('hidden');
+                adminViewNode.classList.remove('hidden');
+                roleBadgeNode.innerText = "System Administrator / HR Lead";
+                workspaceInfoText.innerText = "Workspace Node: Core Org-Wide Framework Matrix";
+                
+                adminBtn.className = "text-xs font-semibold py-2 px-3 rounded border bg-espresso text-cream transition-all";
+                devBtn.className = "text-xs font-semibold py-2 px-3 rounded border bg-parchment border-clay/20 text-clay transition-all";
+            } else {
+                devViewNode.classList.remove('hidden');
+                adminViewNode.classList.add('hidden');
+                roleBadgeNode.innerText = "Lead Developer";
+                workspaceInfoText.innerText = "Workspace: Engine-Room // Core";
+
+                devBtn.className = "text-xs font-semibold py-2 px-3 rounded border bg-espresso text-cream transition-all";
+                adminBtn.className = "text-xs font-semibold py-2 px-3 rounded border bg-parchment border-clay/20 text-clay transition-all";
+            }
+        }
+
+        // Live Action Telemetry Injection Demonstrators
+        function injectTelemetry(type) {
+            const streamContainer = document.getElementById('telemetryLogStream');
+            const elementRow = document.createElement('div');
+            elementRow.className = "p-3 flex justify-between items-center bg-accentAmber/5 transition-all duration-300 animate-pulse";
+            
+            let messageText = "";
+            let pointsText = "";
+
+            if (type === 'commit') {
+                telemetryState.intelligenceScore += 1;
+                messageText = "Pushed verified commit to main tracking cluster node branch references";
+                pointsText = "+5 Commit Event Checked";
+            } else if (type === 'pr') {
+                telemetryState.intelligenceScore += 3;
+                messageText = "Analyzed and merged multi-tier structure structural pull-request configuration matrix";
+                pointsText = "+10 PR Impact Verified";
+            } else {
+                telemetryState.silentUnits += 1;
+                telemetryState.intelligenceScore += 2;
+                messageText = "Coordinated micro-impedance blockers in chat channel workspace threads natively interpreted";
+                pointsText = "+7 Silent Collaboration Value";
+            }
+
+            elementRow.innerHTML = `
+                <span class="flex items-center gap-2"><i data-lucide="radio" class="w-3.5 h-3.5 text-accentAmber"></i> ${messageText}</span>
+                <span class="font-mono text-espresso font-semibold bg-parchment px-1.5 py-0.5 rounded text-[10px]">${pointsText}</span>
+            `;
+
+            streamContainer.insertBefore(elementRow, streamContainer.firstChild);
+            
+            // Sync Engine DOM Metric Outputs Values Counters 
+            document.getElementById('metricScore').innerHTML = `${telemetryState.intelligenceScore}<span class="text-xs text-accentGreen ml-1">▲ Simulated Live</span>`;
+            document.getElementById('metricSilent').innerText = `${telemetryState.silentUnits} Units`;
+            
+            lucide.createIcons();
+        }
+
+        // Context-Aware Contextual Assistant Prompts Simulator
+        function askAiAssistant(promptType) {
+            const displayWindow = document.getElementById('aiChatWindowStream');
+            
+            let userPromptMsg = "";
+            let aiResponseMsg = "";
+
+            if(promptType === 'report') {
+                userPromptMsg = "Generate my weekly summary narrative";
+                aiResponseMsg = "<strong>SyncLogue AI Report:</strong> This week, your primary contribution vectors balanced around micro-buffer code refactoring and active infrastructure maintenance. You prioritized high quality code output with 0 spam-commit markers detected. Your peer review engagement patterns saved approximately 4.2 developer coordination hours cross-team.";
+            } else {
+                userPromptMsg = "Who contributed most efficiently this sprint?";
+                aiResponseMsg = "<strong>SyncLogue Context Interpretation Engine:</strong> Internal platform telemetry metrics indicate <em> Keerthana Ramalingam</em> tracking as top context contributor, maintaining an optimal stability rating. Efficiency scores peaked due to high volumes of silent assist validations and structural review actions recorded across repository instances.";
+            }
+
+            // Append User Question
+            const userBox = document.createElement('div');
+            userBox.className = "bg-cream border border-clay/10 p-2 rounded text-right text-clay font-medium";
+            userBox.innerText = `"${userPromptMsg}"`;
+            
+            // Append AI Answer
+            const aiBox = document.createElement('div');
+            aiBox.className = "bg-parchment border border-clay/20 p-2.5 rounded text-espresso leading-relaxed";
+            aiBox.innerHTML = aiResponseMsg;
+
+            displayWindow.appendChild(userBox);
+            displayWindow.appendChild(aiBox);
+            
+            // Automatic Viewport Scrolling
+            displayWindow.scrollTop = displayWindow.scrollHeight;
+        }
+
+        // Modal Component State Operations Handles
+        function exportProofOfWork() {
+            document.getElementById('proofOfWorkModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('proofOfWorkModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
