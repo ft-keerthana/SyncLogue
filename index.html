@@ -40,9 +40,128 @@
         ::-webkit-scrollbar-track { background: #F9F6F0; }
         ::-webkit-scrollbar-thumb { background: #AF9B8D; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #6E5544; }
+        .sidebar-item{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:14px;
+    border-radius:16px;
+    transition:0.25s ease;
+    font-size:14px;
+    font-weight:500;
+    color:#6E5544; 
+}
+
+#sidebar:hover .sidebar-text{
+    display:block;
+    opacity:1;
+}
+.sidebar-item:hover{
+    background:rgba(255,255,255,0.12);
+    transform:translateX(-4px);
+}
+
+.sidebar-item i{
+    min-width:20px;
+    width:20px;
+    height:20px;
+}
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased">
+    <aside
+    id="sidebar"
+    class="h-screen w-20 hover:w-64 transition-all duration-300 
+    bg-white/10 backdrop-blur-xl border border-white/10
+    text-white flex flex-col fixed right-1 top-4 bottom-4
+    rounded-3xl overflow-hidden z-50 shadow-2xl"
+>
+<div class="p-4 border-b border-clay/20 flex items-center gap-3">
+
+<div class="min-w-[40px] flex justify-center">
+
+    <div class="bg-espresso p-2 rounded-xl shadow-lg">
+
+        <i 
+            data-lucide="layers" 
+            class="w-6 h-6 text-white"
+        ></i>
+
+    </div>
+
+</div>
+
+    <span class="sidebar-text hidden text-xl font-bold heading-fon text-clay">
+        SyncLogue
+    </span>
+
+</div>
+
+<nav class="flex-1 p-3 space-y-2">
+
+    <button class="sidebar-item">
+        <i data-lucide="layout-dashboard"></i>
+        <span class="sidebar-text hidden">Dashboard</span>
+    </button>
+
+    <button class="sidebar-item">
+        <i data-lucide="user"></i>
+        <span class="sidebar-text hidden">Profile</span>
+    </button>
+
+    <button class="sidebar-item">
+        <i data-lucide="gift"></i>
+        <span class="sidebar-text hidden">Rewards</span>
+    </button>
+
+    <button class="sidebar-item">
+        <i data-lucide="gamepad-2"></i>
+        <span class="sidebar-text hidden">Games</span>
+    </button>
+
+    <button class="sidebar-item">
+        <i data-lucide="file-text"></i>
+        <span class="sidebar-text hidden">Reports</span>
+    </button>
+
+    <button class="sidebar-item">
+        <i data-lucide="bar-chart-3"></i>
+        <span class="sidebar-text hidden">Analytics</span>
+    </button>
+
+    <button class="sidebar-item">
+        <i data-lucide="settings"></i>
+        <span class="sidebar-text hidden">Settings</span>
+    </button>
+
+</nav>
+
+<div class="p-4 border-t border-clay/20 flex items-center gap-3">
+
+    <img
+        src="https://i.pravatar.cc/100"
+        class="w-10 h-10 rounded-full object-cover min-w-[40px]"
+    />
+
+    <div class="sidebar-text opacity-0">
+
+        <p class="text-sm font-semibold text-espresso">
+            Keerthana
+        </p>
+
+        <p class="text-xs text-clay">
+            Developer
+        </p>
+
+    </div>
+
+</div>
+
+</aside>
+        
+
+</div>
     <div style="padding:20px; background:white;">
         <input 
             id="githubUser"
@@ -89,7 +208,7 @@
 
     <div class="flex-1 flex flex-col opacity-20 transition-all duration-500" id="mainAppLayout">
         
-        <header class="border-b border-clay/10 bg-cream/80 backdrop-blur sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
+        <header class="border-b border-clay/10 bg-cream/80 backdrop-blur sticky top-0 z-40 px-6 py-4 flex items-center justify-between pr-28">
             <div class="flex items-center gap-3">
                 <div class="p-2 bg-espresso text-cream rounded-lg">
                     <i data-lucide="layers" class="w-5 h-5"></i>
