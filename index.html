@@ -544,10 +544,6 @@
                 </div>
 
             </div>
-
-            
-             
-
               
                 <div class="bg-cream border border-clay/20 rounded-xl p-4 shadow-sm text-xs">
                     <h4 class="font-bold text-espresso uppercase tracking-wider text-[10px] mb-2 text-clay">Pipeline Integration Mapping</h4>
@@ -561,6 +557,71 @@
                 </div>
 
             </div>
+            <button
+onclick="toggleAIChat()"
+class="fixed bottom-6 right-28 z-50 w-14 h-14 rounded-full 
+       bg-espresso hover:bg-clay text-white shadow-2xl 
+       flex items-center justify-center transition-all duration-300"
+>
+
+<i data-lucide="bot" class="w-6 h-6"></i>
+
+</button>
+
+<!-- AI CHAT WINDOW -->
+
+<div 
+id="aiChatWindow"
+class="hidden fixed bottom-24 right-28 z-50 
+       w-[320px] bg-cream border border-clay/20 
+       rounded-3xl shadow-2xl overflow-hidden"
+>
+
+<!-- HEADER -->
+<div class="bg-espresso text-white px-4 py-3 flex items-center gap-2">
+
+    <i data-lucide="sparkles" class="w-4 h-4"></i>
+
+    <span class="text-sm font-semibold">
+        SyncLogue AI
+    </span>
+
+</div>
+
+<!-- CHAT -->
+<div 
+    id="chatMessages"
+    class="h-[300px] overflow-y-auto p-4 space-y-3 bg-parchment/20"
+>
+
+    <div class="bg-white border border-clay/10 p-3 rounded-2xl text-xs text-clay w-fit max-w-[220px]">
+        Hello. How can I assist your workflow today?
+    </div>
+
+</div>
+
+<!-- INPUT -->
+<div class="border-t border-clay/10 p-3 flex gap-2 bg-cream">
+
+    <input
+        id="chatInput"
+        type="text"
+        placeholder="Ask SyncLogue AI..."
+        class="flex-1 border border-clay/20 bg-parchment rounded-xl px-3 py-2 text-sm outline-none"
+    />
+
+    <button
+        onclick="sendAIMessage()"
+        class="bg-espresso hover:bg-clay text-white px-3 rounded-xl transition-all"
+    >
+
+        <i data-lucide="send" class="w-4 h-4"></i>
+
+    </button>
+
+</div>
+
+</div>
         </main>
 
                 
@@ -732,14 +793,63 @@
             displayWindow.scrollTop = displayWindow.scrollHeight;
         }
 
-        // Modal Component State Operations Handles
-        function exportProofOfWork() {
-            document.getElementById('proofOfWorkModal').classList.remove('hidden');
-        }
+        function toggleAIChat() {
 
-        function closeModal() {
-            document.getElementById('proofOfWorkModal').classList.add('hidden');
-        }
+const chat = document.getElementById("aiChatWindow");
+
+chat.classList.toggle("hidden");
+
+}
+
+function sendAIMessage() {
+
+const input = document.getElementById("chatInput");
+const messages = document.getElementById("chatMessages");
+
+if(input.value.trim() === "") return;
+
+messages.innerHTML += `
+    <div class="flex justify-end">
+        <div class="bg-espresso text-white px-3 py-2 rounded-2xl text-xs max-w-[220px]">
+            ${input.value}
+        </div>
+    </div>
+`;
+
+const text = input.value.toLowerCase();
+
+input.value = "";
+
+setTimeout(() => {
+
+    let response = "Telemetry processed successfully.";
+
+    if(text.includes("productivity")) {
+        response = "Productivity metrics increased this sprint cycle.";
+    }
+
+    if(text.includes("github")) {
+        response = "GitHub contribution patterns remain highly consistent.";
+    }
+
+    if(text.includes("burnout")) {
+        response = "Burnout risk currently remains minimal.";
+    }
+
+    messages.innerHTML += `
+        <div class="bg-white border border-clay/10 p-3 rounded-2xl text-xs text-clay w-fit max-w-[220px]">
+            ${response}
+        </div>
+    `;
+
+    messages.scrollTop = messages.scrollHeight;
+
+}, 600);
+
+}
+
+
+       
     </script>
 </body>
 </html>
