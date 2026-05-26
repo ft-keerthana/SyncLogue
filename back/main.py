@@ -1,3 +1,5 @@
+from pydantic import BaseModel
+from model_services import predict_burnout
 from database import collection
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,12 +31,40 @@ def github_user(username: str):
     if data.get("message") == "Not Found":
         return data
 
-    collection.insert_one({
-        "username": data["login"],
-        "repos": data["public_repos"],
-        "followers": data["followers"],
-        "following": data["following"],
-        "avatar": data["avatar_url"]
-    })
+    collection.update_one(
+    {"username": data["login"]},
+    {
+        "$set": {
+            "repos": data["public_repos"],
+            "followers": data["followers"],
+            "following": data["following"],
+            "avatar": data["avatar_url"]
+        }
+    },
+    upsert=True
+)
 
     return data
+
+
+
+class BurnoutRequest(BaseModel):
+    lateNightCommits: int
+    weekendCommits: int
+    codingStreak: int
+    reviewLoad: int
+
+
+@app.post("/predict-burnout")
+def predict(data: BurnoutRequest):
+
+    result = predict_burnout(
+        data.lateNightCommits,
+        data.weekendCommits,
+        data.codingStreak,
+        data.reviewLoad
+    )
+
+    return {
+        "burnoutRisk": result
+    }
