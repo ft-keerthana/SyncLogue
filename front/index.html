@@ -542,20 +542,56 @@
                         JSON.stringify({
                             lateNightCommits:repos,
                             weekendCommits:Math.floor(repos/2),
-                            codingStreak:repos+10,
-                            reviewLoad:followers+following
+                            codingStreak:Math.min(repos*2,30),
+                            reviewLoad:Math.max(1,followers)
                         })
                     }
                 )
                 const data =await res.json()
-                document.getElementById("metricWorkload").innerText=data.burnoutRisk
-                document.getElementById("burnoutResult").innerHTML=`Burnout Risk:${data.burnoutRisk}`}
+                const workload =document.getElementById("metricWorkload")
+                workload.innerText =data.burnoutRisk
+                if(data.burnoutRisk==="HIGH"){
+                    workload.style.color="red"
+                }
+
+                else if(
+                    data.burnoutRisk==="MEDIUM"
+                ){
+                    workload.style.color="orange"
+                }
+
+                else{
+                    workload.style.color="green"
+                }
+                let reason = ""
+
+                if(data.burnoutRisk==="HIGH"){
+
+                    reason ="High activity detected. Workload may need balancing."
+
+                }
+
+                else if(data.burnoutRisk==="MEDIUM"
+                ){
+
+                    reason ="Moderate workload pattern detected."
+
+                }
+
+                else{
+
+                    reason ="Healthy contribution pattern."
+
+                }
+
+                document.getElementById("burnoutResult").innerHTML =`Burnout Risk:${data.burnoutRisk}<br><br>${reason}`               
+            }
                 catch(err){
                     console.log(err)
                     document.getElementById("burnoutResult").innerHTML="Prediction failed"
                 }
 
-                    }
+                }
 
 
 

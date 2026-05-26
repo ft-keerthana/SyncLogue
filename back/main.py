@@ -65,6 +65,30 @@ def predict(data: BurnoutRequest):
         data.reviewLoad
     )
 
+    collection.insert_one({
+
+        "lateNightCommits":
+        data.lateNightCommits,
+
+        "weekendCommits":
+        data.weekendCommits,
+
+        "codingStreak":
+        data.codingStreak,
+
+        "reviewLoad":
+        data.reviewLoad,
+
+        "burnoutRisk":
+        result
+
+    })
+
     return {
-        "burnoutRisk": result
+
+        "burnoutRisk":
+        result
+
     }
+
+    
