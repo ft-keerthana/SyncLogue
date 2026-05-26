@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SyncLogue Gamification</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        espresso: '#2B1E17',
+                        clay: '#6E5544',
+                        biscuit: '#AF9B8D',
+                        cream: '#F9F6F0',
+                        parchment: '#F2EDE4',
+                        accentGreen: '#4A5D4E',
+                        accentAmber: '#A87C43'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+
+        body{
+            background:#F9F6F0;
+            color:#2B1E17;
+            font-family:Inter,sans-serif;
+        }
+
+        .heading-font{
+            font-family:'Cabinet Grotesk',sans-serif;
+        }
+
+    </style>
+
+</head>
+
+<body class="min-h-screen">
+    <header class="border-b border-clay/10 bg-cream/80 backdrop-blur px-6 py-4 flex items-center justify-between">
+
+        <div>
+
+            <h1 class="heading-font text-2xl font-bold text-espresso">
+                SyncLogue Rewards
+            </h1>
+
+            <p class="text-xs text-clay mt-1">
+                Engineering contribution rewards and achievement systems
+            </p>
+
+        </div>
+
+        <a
+            href="index.html"
+            class="bg-espresso hover:bg-clay text-white text-sm px-4 py-2 rounded-xl transition-all"
+        >
+            Back Dashboard
+        </a>
+
+    </header>
+    <main class="max-w-6xl mx-auto p-6 space-y-6">
+        <div class="bg-cream border border-clay/20 rounded-2xl p-6 shadow-sm">
+
+            <div class="flex items-center justify-between mb-5">
+
+                <h2 class="heading-font text-xl font-bold text-espresso flex items-center gap-2">
+
+                    <i data-lucide="sparkles" class="w-5 h-5 text-accentAmber"></i>
+
+                    Gamification & Badges
+
+                </h2>
+
+                <span class="text-xs bg-accentAmber/10 text-accentAmber px-3 py-1 rounded-lg font-bold uppercase tracking-wider">
+                    Level 4
+                </span>
+
+            </div>
+            <div class="mb-6">
+
+                <div class="flex justify-between text-sm text-clay mb-2">
+
+                    <span>
+                        XP points to Level 5 Progression
+                    </span>
+
+                    <span class="font-bold text-espresso">
+                        740 / 1000 XP
+                    </span>
+
+                </div>
+
+                <div class="w-full bg-parchment h-3 rounded-full overflow-hidden">
+
+                    <div 
+                        class="bg-accentAmber h-full rounded-full"
+                        style="width:74%"
+                    ></div>
+
+                </div>
+
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                <div class="p-4 bg-parchment rounded-xl border border-clay/10 flex items-center gap-3">
+
+                    <span class="text-2xl">
+                        🐞
+                    </span>
+
+                    <div>
+
+                        <p class="font-semibold text-espresso">
+                            Bug Hunter
+                        </p>
+
+                        <p class="text-xs text-clay mt-1">
+                            Core System Debugging
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="p-4 bg-parchment rounded-xl border border-clay/10 flex items-center gap-3">
+
+                    <span class="text-2xl">
+                        📚
+                    </span>
+
+                    <div>
+
+                        <p class="font-semibold text-espresso">
+                            Doc Hero
+                        </p>
+
+                        <p class="text-xs text-clay mt-1">
+                            Knowledge Contributions
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="p-4 bg-parchment rounded-xl border border-clay/10 flex items-center gap-3">
+
+                    <span class="text-2xl">
+                        🔥
+                    </span>
+
+                    <div>
+
+                        <p class="font-semibold text-espresso">
+                            Streak King
+                        </p>
+
+                        <p class="text-xs text-clay mt-1">
+                            12 Days Consistency
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="p-4 bg-parchment rounded-xl border border-clay/10 flex items-center gap-3 opacity-50">
+
+                    <span class="text-2xl">
+                        🔒
+                    </span>
+
+                    <div>
+
+                        <p class="font-semibold text-espresso">
+                            Team Player
+                        </p>
+
+                        <p class="text-xs text-clay mt-1">
+                            Locked Achievement
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="bg-cream border border-clay/20 rounded-2xl p-6 shadow-sm">
+
+            <h2 class="heading-font text-xl font-bold text-espresso mb-5">
+                Contribution Leaderboard
+            </h2>
+
+            <div class="space-y-3">
+
+                <div class="flex items-center justify-between bg-parchment rounded-xl p-4">
+
+                    <div class="flex items-center gap-3">
+
+                        <span class="text-xl">
+                            🥇
+                        </span>
+
+                        <div>
+
+                            <p class="font-semibold text-espresso">
+                                Keerthana
+                            </p>
+
+                            <p class="text-xs text-clay">
+                                Backend Architecture
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <span class="font-bold text-accentAmber">
+                        1420 XP
+                    </span>
+
+                </div>
+
+                <div class="flex items-center justify-between bg-parchment rounded-xl p-4">
+
+                    <div class="flex items-center gap-3">
+
+                        <span class="text-xl">
+                            🥈
+                        </span>
+
+                        <div>
+
+                            <p class="font-semibold text-espresso">
+                                Alex
+                            </p>
+
+                            <p class="text-xs text-clay">
+                                Frontend Systems
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <span class="font-bold text-accentAmber">
+                        1180 XP
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+
+        lucide.createIcons();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SyncLogue Reports</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        espresso: '#2B1E17',
+                        clay: '#6E5544',
+                        biscuit: '#AF9B8D',
+                        cream: '#F9F6F0',
+                        parchment: '#F2EDE4',
+                        accentGreen: '#4A5D4E',
+                        accentAmber: '#A87C43'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+
+        body{
+            background:#F9F6F0;
+            color:#2B1E17;
+            font-family:Inter,sans-serif;
+        }
+
+        .heading-font{
+            font-family:'Cabinet Grotesk',sans-serif;
+        }
+
+    </style>
+
+</head>
+
+<body class="min-h-screen">
+
+    <header class="border-b border-clay/10 bg-cream/80 backdrop-blur px-6 py-4 flex items-center justify-between">
+
+        <div>
+
+            <h1 class="heading-font text-2xl font-bold text-espresso">
+                SyncLogue Reports
+            </h1>
+
+            <p class="text-xs text-clay mt-1">
+                Verified Proof-of-Work Intelligence Reports
+            </p>
+
+        </div>
+
+        <a
+            href="index.html"
+            class="bg-espresso hover:bg-clay text-white text-sm px-4 py-2 rounded-xl transition-all"
+        >
+            Back Dashboard
+        </a>
+
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6 space-y-6">
+
+        <div class="bg-cream border border-clay/20 rounded-2xl p-6 shadow-sm">
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+
+                <div>
+
+                    <h2 class="heading-font text-xl font-bold text-espresso">
+                        Verified Proof-of-Work Engine
+                    </h2>
+
+                    <p class="text-xs text-clay mt-1">
+                        Transform raw logs into verified engineering portfolios.
+                    </p>
+
+                </div>
+
+                <button
+                    onclick="exportProofOfWork()"
+                    class="bg-accentGreen text-white hover:bg-espresso text-xs font-semibold px-5 py-3 rounded-xl transition-all flex items-center gap-2"
+                >
+
+                    <i data-lucide="file-down" class="w-4 h-4"></i>
+
+                    Export Verified Portfolio
+
+                </button>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                <div class="p-4 bg-parchment rounded-xl border border-clay/10">
+
+                    <div class="flex items-center gap-2 text-espresso font-medium text-sm">
+
+                        <i data-lucide="linkedin" class="w-4 h-4"></i>
+
+                        LinkedIn Integration
+
+                    </div>
+
+                    <p class="text-xs text-clay mt-2">
+                        Verified capability sync into professional identity systems.
+                    </p>
+
+                </div>
+
+                <div class="p-4 bg-parchment rounded-xl border border-clay/10">
+
+                    <div class="flex items-center gap-2 text-espresso font-medium text-sm">
+
+                        <i data-lucide="link" class="w-4 h-4"></i>
+
+                        Crypto-Signed URI
+
+                    </div>
+
+                    <p class="text-xs text-clay mt-2">
+                        Immutable proof-of-work verification shareable links.
+                    </p>
+
+                </div>
+
+                <div class="p-4 bg-parchment rounded-xl border border-clay/10">
+
+                    <div class="flex items-center gap-2 text-espresso font-medium text-sm">
+
+                        <i data-lucide="award" class="w-4 h-4"></i>
+
+                        Skill Mapping
+
+                    </div>
+
+                    <p class="text-xs text-clay mt-2">
+                        AI-detected engineering strengths from real telemetry logs.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    
+    <div
+        id="proofOfWorkModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"
+    >
+
+        <div class="bg-cream max-w-2xl w-full rounded-3xl shadow-2xl p-6">
+
+            <div class="flex items-start justify-between mb-5">
+
+                <div>
+
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-accentGreen">
+                        Verified Portfolio
+                    </span>
+
+                    <h3 class="heading-font text-2xl font-bold text-espresso mt-1">
+                        SyncLogue verified_impact_portfolio.pdf
+                    </h3>
+
+                </div>
+
+                <button onclick="closeModal()">
+
+                    <i data-lucide="x" class="w-5 h-5 text-clay"></i>
+
+                </button>
+
+            </div>
+
+            <div class="space-y-4 text-sm text-clay leading-relaxed">
+
+                <p>
+                    • Total verified production commits: 28
+                </p>
+
+                <p>
+                    • Pull requests merged successfully: 6
+                </p>
+
+                <p>
+                    • Silent collaboration events detected: 14
+                </p>
+
+                <p>
+                    • Mentorship and debugging support contributions recognized.
+                </p>
+
+            </div>
+
+            <div class="mt-6 flex justify-end">
+
+                <button
+                onclick="downloadPDF()"
+                class="bg-espresso hover:bg-clay text-white px-5 py-2 rounded-xl text-sm transition-all"
+            >
+                Download Report
+            </button>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+<div class="bg-cream border border-clay/20 rounded-2xl p-6 shadow-sm">
+
+    <div class="border-b border-clay/10 pb-4 mb-5">
+
+        <h2 class="heading-font text-xl font-bold text-espresso text-center">
+            --- SYNCLOGUE ACCREDITED WORK TELEMETRY RECORD ---
+        </h2>
+
+    </div>
+
+    <div class="space-y-5 text-sm text-clay">
+
+        <div>
+
+            <p>
+                <span class="font-bold text-espresso">
+                    Contributed Identity Node:
+                </span>
+
+                Keerthana Ramalingam
+            </p>
+
+            <p class="mt-2">
+
+                <span class="font-bold text-espresso">
+                    Assigned Engineering Speciality:
+                </span>
+
+                Software Engineer // Backend & Infrastructure Pipeline Architecture
+
+            </p>
+
+        </div>
+
+        <div class="border-t border-clay/10 pt-4">
+
+            <h3 class="font-bold text-accentGreen mb-3">
+                Verified Metrics Log Summaries (Past 14 Days):
+            </h3>
+
+            <ul class="space-y-2">
+
+                <li>
+                    — Total Valid Non-Spam Production Commits: 28 Units
+                </li>
+
+                <li>
+                    — Pull Request Ecosystem Implementations Merged: 6 Targets
+                </li>
+
+                <li>
+                    — Code Quality Structural Review Matrix Verification: 14 Verifications
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="border-t border-clay/10 pt-4">
+
+            <h3 class="font-bold text-accentAmber mb-3">
+                Silent Value System Contributions (Verified Beyond Commit Logs):
+            </h3>
+
+            <ul class="space-y-2">
+
+                <li>
+                    — Cross-departmental Mentorship Intersect Events: 4 Traceable Incidents
+                </li>
+
+                <li>
+                    — Technical System Wiki Documentation Enhancements: 8 Commits Checked
+                </li>
+
+            </ul>
+
+        </div>
+   
+        <div class="border-t border-clay/10 pt-4">
+
+            <div class="bg-parchment border border-clay/10 rounded-xl p-4">
+
+                <h4 class="font-semibold text-espresso mb-2">
+                    AI Analytical Quality Interpretive Summary Statement
+                </h4>
+
+                <p class="text-xs leading-relaxed">
+
+                    "The individual exhibits robust adherence to memory optimization
+                    protocols inside micro-service structural contexts. Manifests
+                    critical engineering habits through high levels of silent
+                    pull-request review activity, contributing value extensively
+                    to overall software team balance vectors."
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="border-t border-clay/10 pt-5 flex flex-wrap gap-3 justify-end">
+
+            <button
+                class="border border-clay/20 hover:bg-parchment text-espresso px-5 py-1 rounded-xl text-sm transition-all"
+            >
+                Copy Secure URI Link
+            </button>
+
+            <button
+    onclick="downloadPDF()"
+    class="bg-espresso hover:bg-clay text-white px-5 py-1 rounded-xl text-sm transition-all">
+    Download Report
+    </button>
+            
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</main>
+    <script>
+
+        lucide.createIcons();
+
+        function exportProofOfWork(){
+
+            document
+                .getElementById("proofOfWorkModal")
+                .classList.remove("hidden");
+
+        }
+
+        function closeModal(){
+
+            document
+                .getElementById("proofOfWorkModal")
+                .classList.add("hidden");
+
+        }
+        function downloadPDF() {
+
+const element = document.body;
+
+html2pdf()
+    .from(element)
+    .save("SyncLogue_Report.pdf");
+
+}
+    </script>
+
+</body>
+
+</html>
