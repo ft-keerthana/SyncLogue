@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncLogue // Member Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        espresso: '#2B1E17',
+                        clay: '#6E5544',
+                        biscuit: '#AF9B8D',
+                        cream: '#F9F6F0',
+                        parchment: '#F2EDE4',
+                        accentGreen: '#4A5D4E',
+                        accentAmber: '#A87C43'
+                    },
+                    fontFamily: {
+                        sans: ['Cabinet Grotesk', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&display=swap');
+        body {
+            background-color: #F9F6F0;
+            color: #2B1E17;
+            font-family: 'Inter', sans-serif;
+        }
+        .heading-font {
+            font-family: 'Cabinet Grotesk', sans-serif;
+        }
+        .sidebar-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px;
+            border-radius: 16px;
+            transition: 0.25s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6E5544; 
+        }
+        #sidebar:hover .sidebar-text {
+            display: block;
+            opacity: 1;
+        }
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(-4px);
+        }
+        .sidebar-item i {
+            min-width: 20px;
+            width: 20px;
+            height: 20px;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F9F6F0; }
+        ::-webkit-scrollbar-thumb { background: #AF9B8D; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6E5544; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <!-- Unified Navigation Sidebar -->
+    <aside
+        id="sidebar"
+        class="h-screen w-20 hover:w-64 transition-all duration-300 
+        bg-white/10 backdrop-blur-xl border border-white/10
+        text-white flex flex-col fixed right-1 top-4 bottom-4
+        rounded-3xl overflow-hidden z-50 shadow-2xl"
+    >
+        <div class="p-4 border-b border-clay/20 flex items-center gap-3">
+            <div class="min-w-[40px] flex justify-center">
+                <div class="bg-espresso p-2 rounded-xl shadow-lg">
+                    <i data-lucide="layers" class="w-6 h-6 text-white"></i>
+                </div>
+            </div>
+            <span class="sidebar-text hidden text-xl font-bold heading-font text-clay">SyncLogue</span>
+        </div>
+
+        <nav class="flex-1 p-3 space-y-2">
+            <a href="index.html" class="sidebar-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span class="sidebar-text hidden">Dashboard</span>
+            </a>
+            <a href="profile.html" class="sidebar-item bg-espresso/5 border border-espresso/10">
+                <i data-lucide="user" class="text-espresso"></i>
+                <span class="sidebar-text hidden font-semibold text-espresso">Profile</span>
+            </a>
+            <a href="game.html" class="sidebar-item">
+                <i data-lucide="gift"></i>
+                <span class="sidebar-text hidden">Rewards</span>
+            </a>
+            <a href="game.html" class="sidebar-item">
+                <i data-lucide="gamepad-2"></i>
+                <span class="sidebar-text hidden">Games</span>
+            </a>
+            <a href="report.html" class="sidebar-item">
+                <i data-lucide="file-text"></i>
+                <span class="sidebar-text hidden">Reports</span>
+            </a>
+            <a href="analytics.html" class="sidebar-item">
+                <i data-lucide="bar-chart-3"></i>
+                <span class="sidebar-text hidden">Analytics</span>
+            </a>
+            <a href="#" class="sidebar-item">
+                <i data-lucide="settings"></i>
+                <span class="sidebar-text hidden">Settings</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-clay/20 flex items-center gap-3">
+            <img
+                id="sidebarAvatar"
+                src="https://i.pravatar.cc/100"
+                class="w-10 h-10 rounded-full object-cover min-w-[40px]"
+            />
+            <div class="sidebar-text opacity-0">
+                <p id="sidebarName" class="text-sm font-semibold text-espresso">Keerthana</p>
+                <p id="sidebarRole" class="text-xs text-clay">Developer</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col" id="mainAppLayout">
+        
+        <!-- Header -->
+        <header class="border-b border-clay/10 bg-cream/80 backdrop-blur sticky top-0 z-40 px-6 py-4 flex items-center justify-between pr-28">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-espresso text-cream rounded-lg">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="heading-font text-xl font-bold tracking-tight text-espresso">Workplace Profile</h1>
+                    <p class="text-xs text-clay">Verified Skill syllabus & engineering proof-of-identity node</p>
+                </div>
+            </div>
+
+            <!-- Role identity controller selector -->
+            <div class="flex items-center gap-2 bg-parchment/80 border border-clay/20 p-1.5 rounded-xl shadow-sm">
+                <span class="text-[10px] uppercase font-bold text-clay tracking-wider px-2">Simulation:</span>
+                <button id="toggleBtnDev" onclick="swapToRole('developer')" class="text-xs font-semibold py-1 px-3 rounded-lg bg-espresso text-cream transition-all">Developer</button>
+                <button id="toggleBtnAdmin" onclick="swapToRole('admin')" class="text-xs font-semibold py-1 px-3 rounded-lg bg-parchment border-clay/10 text-clay hover:bg-cream transition-all">Admin View</button>
+            </div>
+        </header>
+
+        <main class="flex-1 p-6 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 pr-28">
+            
+            <!-- Left Side - Profile Summary & Editing Form -->
+            <div class="lg:col-span-8 space-y-6">
+                
+                <!-- Main Profile Display Card -->
+                <div class="bg-cream border border-clay/20 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start md:items-center relative overflow-hidden">
+                    <div class="absolute -right-16 -top-16 w-36 h-36 bg-accentGreen/5 rounded-full blur-2xl"></div>
+                    <div class="absolute -left-16 -bottom-16 w-36 h-36 bg-accentAmber/5 rounded-full blur-2xl"></div>
+                    
+                    <div class="relative">
+                        <img id="profilePicture" src="https://i.pravatar.cc/150?img=47" class="w-24 h-24 rounded-2xl object-cover border-2 border-clay/20 shadow-md transition-all" />
+                        <span class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-cream animate-pulse"></span>
+                    </div>
+
+                    <div class="flex-1 space-y-2">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h2 id="displayName" class="heading-font text-2xl font-bold text-espresso">Keerthana Ramalingam</h2>
+                            <span id="roleBadge" class="text-[10px] bg-accentGreen/10 text-accentGreen border border-accentGreen/20 px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider">Lead Developer</span>
+                        </div>
+                        <p id="profileSummary" class="text-xs text-clay max-w-xl leading-relaxed">
+                            "Backend infrastructure architect with 5+ years of experience focusing on memory buffer allocation, low-latency queues, and high-quality asynchronous worker loops. Passionate about helping team members debug configuration scripts."
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-4 pt-2 text-xs text-clay">
+                            <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> London Node (HQ)</span>
+                            <span class="flex items-center gap-1"><i data-lucide="mail" class="w-3.5 h-3.5"></i> k.ramalingam@synclogue.io</span>
+                            <span class="flex items-center gap-1 text-accentAmber font-medium"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Level 4 Contributor</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Skill Management Panel -->
+                <div class="bg-cream border border-clay/20 rounded-2xl p-6 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-clay/10 pb-3">
+                        <div>
+                            <h3 class="heading-font text-base font-bold text-espresso">Skill Syllabus & Mastery Track</h3>
+                            <p class="text-xs text-clay">Configure your primary engineering focus points to optimize workplace sync paths.</p>
+                        </div>
+                        <button onclick="toggleEditSkillsForm()" class="bg-espresso hover:bg-clay text-cream text-xs font-semibold py-1.5 px-3 rounded-lg transition-all flex items-center gap-1">
+                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit Skills
+                        </button>
+                    </div>
+
+                    <!-- Skills List -->
+                    <div id="skillsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="bg-parchment/60 border border-clay/10 p-3 rounded-xl flex flex-col justify-between">
+                            <span class="text-xs font-bold text-espresso">Backend Engine</span>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-[10px] text-clay/80">Python / FastAPI</span>
+                                <span class="text-[10px] bg-accentGreen/10 text-accentGreen font-bold px-1.5 py-0.5 rounded">Expert</span>
+                            </div>
+                        </div>
+                        <div class="bg-parchment/60 border border-clay/10 p-3 rounded-xl flex flex-col justify-between">
+                            <span class="text-xs font-bold text-espresso">Data Layer Structs</span>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-[10px] text-clay/80">MongoDB / Redis</span>
+                                <span class="text-[10px] bg-accentGreen/10 text-accentGreen font-bold px-1.5 py-0.5 rounded">Expert</span>
+                            </div>
+                        </div>
+                        <div class="bg-parchment/60 border border-clay/10 p-3 rounded-xl flex flex-col justify-between">
+                            <span class="text-xs font-bold text-espresso">CI/CD Pipelines</span>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-[10px] text-clay/80">GitHub Actions</span>
+                                <span class="text-[10px] bg-accentAmber/10 text-accentAmber font-bold px-1.5 py-0.5 rounded">Advanced</span>
+                            </div>
+                        </div>
+                        <div class="bg-parchment/60 border border-clay/10 p-3 rounded-xl flex flex-col justify-between">
+                            <span class="text-xs font-bold text-espresso">Async Queues</span>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-[10px] text-clay/80">Celery / RabbitMQ</span>
+                                <span class="text-[10px] bg-accentAmber/10 text-accentAmber font-bold px-1.5 py-0.5 rounded">Advanced</span>
+                            </div>
+                        </div>
+                        <div class="bg-parchment/60 border border-clay/10 p-3 rounded-xl flex flex-col justify-between">
+                            <span class="text-xs font-bold text-espresso">Memory Opt</span>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-[10px] text-clay/80">C Refactoring</span>
+                                <span class="text-[10px] bg-accentGreen/10 text-accentGreen font-bold px-1.5 py-0.5 rounded">Expert</span>
+                            </div>
+                        </div>
+                        <div class="bg-parchment/60 border border-clay/10 p-3 rounded-xl flex flex-col justify-between">
+                            <span class="text-xs font-bold text-espresso">Frontend Framework</span>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-[10px] text-clay/80">Tailwind / React</span>
+                                <span class="text-[10px] bg-clay/10 text-clay font-bold px-1.5 py-0.5 rounded">Intermediate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Edit Form -->
+                    <div id="editSkillsForm" class="hidden bg-parchment/40 border border-clay/20 p-4 rounded-xl space-y-3 transition-all duration-300">
+                        <h4 class="text-xs font-bold text-espresso uppercase tracking-wider">Update Personal Skill Coordinates</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div>
+                                <label class="block text-clay font-semibold mb-1">Professional Headline</label>
+                                <input id="editSummaryInput" type="text" class="w-full bg-cream border border-clay/30 rounded-lg p-2 text-espresso focus:outline-none focus:border-espresso" value="Backend infrastructure architect with 5+ years of experience focusing on memory buffer allocation...">
+                            </div>
+                            <div>
+                                <label class="block text-clay font-semibold mb-1">Add a Skill Tag</label>
+                                <div class="flex gap-2">
+                                    <input id="newSkillName" type="text" placeholder="e.g. Docker" class="flex-1 bg-cream border border-clay/30 rounded-lg p-2 text-espresso focus:outline-none focus:border-espresso">
+                                    <select id="newSkillLevel" class="bg-cream border border-clay/30 rounded-lg px-2 py-1 text-espresso">
+                                        <option value="Expert">Expert</option>
+                                        <option value="Advanced">Advanced</option>
+                                        <option value="Intermediate">Intermediate</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end gap-2 text-xs pt-2">
+                            <button onclick="toggleEditSkillsForm()" class="px-3 py-1.5 border border-clay/20 text-clay hover:bg-parchment rounded-lg transition-colors">Cancel</button>
+                            <button onclick="saveSkillUpdates()" class="px-4 py-1.5 bg-espresso text-cream hover:bg-clay rounded-lg font-medium transition-colors">Save Updates</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integration Management Hub -->
+                <div class="bg-cream border border-clay/20 rounded-2xl p-6 shadow-sm space-y-4">
+                    <div>
+                        <h3 class="heading-font text-base font-bold text-espresso">Pipeline & Integration Management</h3>
+                        <p class="text-xs text-clay">Verify or disconnect active data pipelines capturing telemetry blocks securely.</p>
+                    </div>
+
+                    <div class="divide-y divide-clay/10">
+                        <div class="py-3.5 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-espresso/5 border border-clay/10 rounded-xl text-espresso">
+                                    <i data-lucide="github" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-espresso">GitHub Workspace Pipeline</h4>
+                                    <p class="text-[10px] text-clay">Pulls commit structure, PR lifecycle parameters, and code review activity.</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer" onchange="togglePipelineStatus('GitHub', this)">
+                                <div class="w-9 h-5 bg-biscuit/40 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cream after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accentGreen"></div>
+                            </label>
+                        </div>
+
+                        <div class="py-3.5 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-espresso/5 border border-clay/10 rounded-xl text-espresso">
+                                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-espresso">Slack Interactive Sync</h4>
+                                    <p class="text-[10px] text-clay">Tracks "Silent Peer Support" based on Slack huddles and coordination metrics.</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer" onchange="togglePipelineStatus('Slack', this)">
+                                <div class="w-9 h-5 bg-biscuit/40 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cream after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accentGreen"></div>
+                            </label>
+                        </div>
+
+                        <div class="py-3.5 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-espresso/5 border border-clay/10 rounded-xl text-espresso opacity-40">
+                                    <i data-lucide="trello" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-espresso opacity-60">Jira Ticket Telemetry</h4>
+                                    <p class="text-[10px] text-clay">Maps ticket cycle times, release velocities, and blocker resolutions.</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" onchange="togglePipelineStatus('Jira', this)">
+                                <div class="w-9 h-5 bg-biscuit/40 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cream after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accentGreen"></div>
+                            </label>
+                        </div>
+
+                        <div class="py-3.5 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-espresso/5 border border-clay/10 rounded-xl text-espresso">
+                                    <i data-lucide="code-2" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-espresso">VS Code / IDE Context Parser</h4>
+                                    <p class="text-[10px] text-clay">Detects active development focus blocks without reading actual file text.</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer" onchange="togglePipelineStatus('VS Code', this)">
+                                <div class="w-9 h-5 bg-biscuit/40 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cream after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accentGreen"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Side - Immutable Credentials & Gamification -->
+            <div class="lg:col-span-4 space-y-6">
+                
+                <!-- Cryptographically Verified Proof-of-Work Link -->
+                <div class="bg-cream border-2 border-espresso/20 p-5 rounded-2xl shadow-sm space-y-4 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 bg-accentGreen text-cream text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-br-xl">Accredited Node</div>
+                    <div class="pt-2">
+                        <h3 class="heading-font text-sm font-bold text-espresso flex items-center gap-1.5 mt-1">
+                            <i data-lucide="key-round" class="w-4 h-4 text-accentGreen"></i> SyncLogue Proof-of-Work
+                        </h3>
+                        <p class="text-[11px] text-clay mt-1">
+                            Your contributions are cryptographically compiled into an immutable portfolio hash verifiable by HR leads or enterprise onboarding channels.
+                        </p>
+                    </div>
+
+                    <div class="p-3 bg-parchment rounded-xl border border-clay/10 text-xs font-mono break-all space-y-2">
+                        <div class="flex items-center justify-between text-[9px] text-clay uppercase tracking-wider font-semibold border-b border-clay/10 pb-1">
+                            <span>Node URI Registry Hash</span>
+                            <span class="text-accentGreen">Verified</span>
+                        </div>
+                        <p class="text-[10px] text-espresso leading-relaxed">
+                            synclogue://node-pow-v1:keerthana:47a2fb91e01d1c448
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <button onclick="copyPoWLink()" class="w-full bg-espresso hover:bg-clay text-cream text-xs font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                            <i data-lucide="copy" class="w-4 h-4"></i> Copy secure URL link
+                        </button>
+                        <a href="report.html" class="w-full border border-clay/20 hover:bg-parchment text-espresso text-center text-xs font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5">
+                            <i data-lucide="file-text" class="w-4 h-4 text-clay"></i> View verified report
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Gamification Accomplishments Showcase -->
+                <div class="bg-cream border border-clay/20 rounded-2xl p-5 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-clay/10 pb-2">
+                        <h3 class="heading-font text-sm font-bold text-espresso flex items-center gap-1.5">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-accentAmber"></i> Core Achievements
+                        </h3>
+                        <span class="text-[10px] bg-accentAmber/10 text-accentAmber px-2 py-0.5 rounded font-bold">Level 4</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3 p-2 bg-parchment/60 rounded-xl border border-clay/5 hover:scale-[1.02] transition-transform">
+                            <span class="text-2xl">🐞</span>
+                            <div>
+                                <h4 class="text-xs font-bold text-espresso">Bug Hunter</h4>
+                                <p class="text-[10px] text-clay">Awarded for deep pointer leak fix inside production C-struct wraps.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 p-2 bg-parchment/60 rounded-xl border border-clay/5 hover:scale-[1.02] transition-transform">
+                            <span class="text-2xl">📚</span>
+                            <div>
+                                <h4 class="text-xs font-bold text-espresso">Doc Hero</h4>
+                                <p class="text-[10px] text-clay">Maintained 8 technical system documentation updates in current sprint.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 p-2 bg-parchment/60 rounded-xl border border-clay/5 hover:scale-[1.02] transition-transform">
+                            <span class="text-2xl">🔥</span>
+                            <div>
+                                <h4 class="text-xs font-bold text-espresso">Streak King</h4>
+                                <p class="text-[10px] text-clay">12 days consistent telemetry logging active on the workspace branch.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 p-2 bg-parchment/60 rounded-xl border border-clay/5 opacity-50 relative">
+                            <span class="text-2xl">🔒</span>
+                            <div>
+                                <h4 class="text-xs font-bold text-espresso">Team Player</h4>
+                                <p class="text-[10px] text-clay">Requires 5 active pull request reviews or peer support sync logs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Team Settings Portal -->
+                <div id="adminPanel" class="hidden bg-cream border border-clay/20 rounded-2xl p-5 shadow-sm space-y-4">
+                    <div class="border-b border-clay/10 pb-2">
+                        <h3 class="heading-font text-sm font-bold text-espresso flex items-center gap-1.5">
+                            <i data-lucide="shield-alert" class="w-4 h-4 text-accentAmber"></i> Team Administration Node
+                        </h3>
+                        <p class="text-[10px] text-clay">System Org control parameters & team sync rules.</p>
+                    </div>
+
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-center justify-between p-2 bg-parchment/40 rounded-lg">
+                            <span class="text-clay font-medium">Compliance verification</span>
+                            <span class="font-mono text-accentGreen font-bold">Compliant</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 bg-parchment/40 rounded-lg">
+                            <span class="text-clay font-medium">Active sub-teams mapped</span>
+                            <span class="font-mono text-espresso font-bold">3 Teams</span>
+                        </div>
+                        
+                        <div class="pt-2 flex flex-col gap-2">
+                            <button onclick="alert('Enterprise compliance key refreshed')" class="w-full bg-clay text-cream text-[10px] font-semibold py-2 rounded-lg hover:bg-espresso transition-colors">
+                                Reset Workspace Compliance Keys
+                            </button>
+                            <button onclick="alert('Sent invite credentials')" class="w-full border border-clay/20 text-espresso text-[10px] font-semibold py-2 rounded-lg hover:bg-parchment transition-colors">
+                                Invite Outbound Sub-Node
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer class="border-t border-clay/10 bg-parchment/30 px-6 py-4 text-center text-xs text-clay">
+            SyncLogue Workplace Intelligence System Matrix &copy; 2026. Custom Tailored for Engineering Teams Who Prioritize Real Contribution Value Metrics Over Crude Lines of Code Tracking.
+        </footer>
+    </div>
+
+    <script>
+        // Live Profile State Coordinates
+        let profileState = {
+            activeRole: 'developer',
+            displayName: 'Keerthana Ramalingam',
+            roleBadge: 'Lead Developer',
+            summary: 'Backend infrastructure architect with 5+ years of experience focusing on memory buffer allocation, low-latency queues, and high-quality asynchronous worker loops. Passionate about helping team members debug configuration scripts.',
+            profileImg: 'https://i.pravatar.cc/150?img=47'
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+
+        // Dynamic Role Switching Systems
+        function swapToRole(role) {
+            profileState.activeRole = role;
+
+            // DOM Element Bindings
+            const displayNameNode = document.getElementById('displayName');
+            const roleBadgeNode = document.getElementById('roleBadge');
+            const summaryNode = document.getElementById('profileSummary');
+            const profileImgNode = document.getElementById('profilePicture');
+            const adminPanelNode = document.getElementById('adminPanel');
+
+            const sidebarAvatar = document.getElementById('sidebarAvatar');
+            const sidebarName = document.getElementById('sidebarName');
+            const sidebarRole = document.getElementById('sidebarRole');
+
+            const devBtn = document.getElementById('toggleBtnDev');
+            const adminBtn = document.getElementById('toggleBtnAdmin');
+
+            if (role === 'admin') {
+                // Set Admin Credentials
+                profileState.displayName = 'Aravind Swaminathan';
+                profileState.roleBadge = 'HR & Talent Intelligence Lead';
+                profileState.summary = 'Talent infrastructure coordinator focused on engineering pipeline metrics, sprint pressure balancing, and team burnout prevention telemetry maps. Dedicated to preserving optimal team velocity without toxic tracking.';
+                profileState.profileImg = 'https://i.pravatar.cc/150?img=68';
+
+                adminPanelNode.classList.remove('hidden');
+                
+                // Sidebar UI updates
+                sidebarName.innerText = "Aravind";
+                sidebarRole.innerText = "HR Lead";
+
+                // Toggle Buttons Highlights
+                adminBtn.className = "text-xs font-semibold py-1 px-3 rounded-lg bg-espresso text-cream transition-all";
+                devBtn.className = "text-xs font-semibold py-1 px-3 rounded-lg bg-parchment border-clay/10 text-clay hover:bg-cream transition-all";
+            } else {
+                // Reset Developer Credentials
+                profileState.displayName = 'Keerthana Ramalingam';
+                profileState.roleBadge = 'Lead Developer';
+                profileState.summary = 'Backend infrastructure architect with 5+ years of experience focusing on memory buffer allocation, low-latency queues, and high-quality asynchronous worker loops. Passionate about helping team members debug configuration scripts.';
+                profileState.profileImg = 'https://i.pravatar.cc/150?img=47';
+
+                adminPanelNode.classList.add('hidden');
+                
+                // Sidebar UI updates
+                sidebarName.innerText = "Keerthana";
+                sidebarRole.innerText = "Developer";
+
+                // Toggle Buttons Highlights
+                devBtn.className = "text-xs font-semibold py-1 px-3 rounded-lg bg-espresso text-cream transition-all";
+                adminBtn.className = "text-xs font-semibold py-1 px-3 rounded-lg bg-parchment border-clay/10 text-clay hover:bg-cream transition-all";
+            }
+
+            // Sync Display Elements
+            displayNameNode.innerText = profileState.displayName;
+            roleBadgeNode.innerText = profileState.roleBadge;
+            summaryNode.innerText = `"${profileState.summary}"`;
+            profileImgNode.src = profileState.profileImg;
+            sidebarAvatar.src = profileState.profileImg;
+
+            lucide.createIcons();
+        }
+
+        // Toggle Skills Edit Panels
+        function toggleEditSkillsForm() {
+            const formNode = document.getElementById('editSkillsForm');
+            formNode.classList.toggle('hidden');
+        }
+
+        // Save Custom Profile Coordinates and Skill nodes
+        function saveSkillUpdates() {
+            const newHeadline = document.getElementById('editSummaryInput').value.trim();
+            const newSkillName = document.getElementById('newSkillName').value.trim();
+            const newSkillLevel = document.getElementById('newSkillLevel').value;
+
+            if (newHeadline) {
+                profileState.summary = newHeadline;
+                document.getElementById('profileSummary').innerText = `"${newHeadline}"`;
+            }
+
+            if (newSkillName) {
+                const skillsGrid = document.getElementById('skillsGrid');
+                const newSkillBox = document.createElement('div');
+                newSkillBox.className = "bg-accentGreen/5 border border-accentGreen/20 p-3 rounded-xl flex flex-col justify-between transition-all duration-300 animate-pulse";
+                
+                let badgeClass = "bg-accentGreen/10 text-accentGreen";
+                if (newSkillLevel === 'Advanced') badgeClass = "bg-accentAmber/10 text-accentAmber";
+                else if (newSkillLevel === 'Intermediate') badgeClass = "bg-clay/10 text-clay";
+
+                newSkillBox.innerHTML = `
+                    <span class="text-xs font-bold text-espresso">${newSkillName}</span>
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-[10px] text-clay/80">User Configured</span>
+                        <span class="text-[10px] ${badgeClass} font-bold px-1.5 py-0.5 rounded">${newSkillLevel}</span>
+                    </div>
+                `;
+                skillsGrid.appendChild(newSkillBox);
+                
+                // Reset inputs
+                document.getElementById('newSkillName').value = "";
+            }
+
+            toggleEditSkillsForm();
+            alert("Workspace intelligence profiles updated successfully.");
+        }
+
+        // Pipeline toggle alert simulation
+        function togglePipelineStatus(name, checkbox) {
+            const statusText = checkbox.checked ? "Connected & Active" : "Disconnected & Paused";
+            alert(`Workspace Pipeline [${name}] status changed: ${statusText}`);
+        }
+
+        // Copy Cryptographic PoW verification links
+        function copyPoWLink() {
+            navigator.clipboard.writeText("synclogue://node-pow-v1:keerthana:47a2fb91e01d1c448");
+            alert("Cryptographic Proof-of-Work URI copied to clipboard successfully.");
+        }
+    </script>
+</body>
+</html>
