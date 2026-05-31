@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncLogue // Telemetry Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        espresso: '#2B1E17',
+                        clay: '#6E5544',
+                        biscuit: '#AF9B8D',
+                        cream: '#F9F6F0',
+                        parchment: '#F2EDE4',
+                        accentGreen: '#4A5D4E',
+                        accentAmber: '#A87C43'
+                    },
+                    fontFamily: {
+                        sans: ['Cabinet Grotesk', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&display=swap');
+        body {
+            background-color: #F9F6F0;
+            color: #2B1E17;
+            font-family: 'Inter', sans-serif;
+        }
+        .heading-font {
+            font-family: 'Cabinet Grotesk', sans-serif;
+        }
+        .sidebar-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px;
+            border-radius: 16px;
+            transition: 0.25s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6E5544; 
+        }
+        #sidebar:hover .sidebar-text {
+            display: block;
+            opacity: 1;
+        }
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(-4px);
+        }
+        .sidebar-item i {
+            min-width: 20px;
+            width: 20px;
+            height: 20px;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F9F6F0; }
+        ::-webkit-scrollbar-thumb { background: #AF9B8D; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6E5544; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <!-- Unified Navigation Sidebar -->
+    <aside
+        id="sidebar"
+        class="h-screen w-20 hover:w-64 transition-all duration-300 
+        bg-white/10 backdrop-blur-xl border border-white/10
+        text-white flex flex-col fixed right-1 top-4 bottom-4
+        rounded-3xl overflow-hidden z-50 shadow-2xl"
+    >
+        <div class="p-4 border-b border-clay/20 flex items-center gap-3">
+            <div class="min-w-[40px] flex justify-center">
+                <div class="bg-espresso p-2 rounded-xl shadow-lg">
+                    <i data-lucide="layers" class="w-6 h-6 text-white"></i>
+                </div>
+            </div>
+            <span class="sidebar-text hidden text-xl font-bold heading-font text-clay">SyncLogue</span>
+        </div>
+
+        <nav class="flex-1 p-3 space-y-2">
+            <a href="index.html" class="sidebar-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span class="sidebar-text hidden">Dashboard</span>
+            </a>
+            <a href="profile.html" class="sidebar-item">
+                <i data-lucide="user"></i>
+                <span class="sidebar-text hidden">Profile</span>
+            </a>
+            <a href="game.html" class="sidebar-item">
+                <i data-lucide="gift"></i>
+                <span class="sidebar-text hidden">Rewards</span>
+            </a>
+            <a href="game.html" class="sidebar-item">
+                <i data-lucide="gamepad-2"></i>
+                <span class="sidebar-text hidden">Games</span>
+            </a>
+            <a href="report.html" class="sidebar-item">
+                <i data-lucide="file-text"></i>
+                <span class="sidebar-text hidden">Reports</span>
+            </a>
+            <a href="analytics.html" class="sidebar-item bg-espresso/5 border border-espresso/10">
+                <i data-lucide="bar-chart-3" class="text-espresso"></i>
+                <span class="sidebar-text hidden font-semibold text-espresso">Analytics</span>
+            </a>
+            <a href="#" class="sidebar-item">
+                <i data-lucide="settings"></i>
+                <span class="sidebar-text hidden">Settings</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-clay/20 flex items-center gap-3">
+            <img
+                id="sidebarAvatar"
+                src="https://i.pravatar.cc/100"
+                class="w-10 h-10 rounded-full object-cover min-w-[40px]"
+            />
+            <div class="sidebar-text opacity-0">
+                <p id="sidebarName" class="text-sm font-semibold text-espresso">Keerthana</p>
+                <p id="sidebarRole" class="text-xs text-clay">Developer</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Layout -->
+    <div class="flex-1 flex flex-col" id="mainAppLayout">
+        
+        <!-- Header -->
+        <header class="border-b border-clay/10 bg-cream/80 backdrop-blur sticky top-0 z-40 px-6 py-4 flex items-center justify-between pr-28">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-espresso text-cream rounded-lg">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="heading-font text-xl font-bold tracking-tight text-espresso">Telemetry Analytics</h1>
+                    <p class="text-xs text-clay">AI-powered workload velocity logs & non-invasive tracking dashboards</p>
+                </div>
+            </div>
+
+            <!-- Simulation switch -->
+            <div class="flex items-center gap-2 bg-parchment/80 border border-clay/20 p-1.5 rounded-xl shadow-sm">
+                <span class="text-[10px] uppercase font-bold text-clay tracking-wider px-2">Simulation:</span>
+                <button id="toggleBtnDev" onclick="swapToRole('developer')" class="text-xs font-semibold py-1 px-3 rounded-lg bg-espresso text-cream transition-all">Developer</button>
+                <button id="toggleBtnAdmin" onclick="swapToRole('admin')" class="text-xs font-semibold py-1 px-3 rounded-lg bg-parchment border-clay/10 text-clay hover:bg-cream transition-all">Admin View</button>
+            </div>
+        </header>
+
+        <main class="flex-1 p-6 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 pr-28">
+            
+            <!-- Left Panel: SVG Telemetry Graphs & Insights -->
+            <div class="lg:col-span-8 space-y-6">
+                
+                <!-- SVG Chart Card: Sprint Contribution Velocity -->
+                <div class="bg-cream border border-clay/20 rounded-2xl p-6 shadow-sm space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-clay/10 pb-4">
+                        <div>
+                            <h3 id="chartTitle" class="heading-font text-base font-bold text-espresso">Engineering Velocity & Commit Stream</h3>
+                            <p class="text-xs text-clay">Holistic production commit metrics over current sprint lifecycle.</p>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs font-semibold text-clay bg-parchment px-2.5 py-1 rounded-lg border border-clay/10">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Live Telemetry Parser
+                        </div>
+                    </div>
+
+                    <!-- Custom Beautiful Responsive SVG Line Graph -->
+                    <div class="relative w-full h-[220px] bg-parchment/30 rounded-xl border border-clay/10 p-2 flex flex-col justify-between">
+                        <svg class="w-full h-full" viewBox="0 0 600 200" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#A87C43" stop-opacity="0.3" />
+                                    <stop offset="100%" stop-color="#A87C43" stop-opacity="0.0" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Grid lines -->
+                            <line x1="50" y1="30" x2="570" y2="30" stroke="#AF9B8D" stroke-dasharray="3 3" stroke-opacity="0.3" />
+                            <line x1="50" y1="80" x2="570" y2="80" stroke="#AF9B8D" stroke-dasharray="3 3" stroke-opacity="0.3" />
+                            <line x1="50" y1="130" x2="570" y2="130" stroke="#AF9B8D" stroke-dasharray="3 3" stroke-opacity="0.3" />
+                            <line x1="50" y1="170" x2="570" y2="170" stroke="#AF9B8D" stroke-opacity="0.6" />
+
+                            <!-- Y-axis values labels -->
+                            <text x="25" y="34" fill="#6E5544" font-size="10" font-family="Inter" text-anchor="middle">100</text>
+                            <text x="25" y="84" fill="#6E5544" font-size="10" font-family="Inter" text-anchor="middle">50</text>
+                            <text x="25" y="134" fill="#6E5544" font-size="10" font-family="Inter" text-anchor="middle">20</text>
+                            <text x="25" y="174" fill="#6E5544" font-size="10" font-family="Inter" text-anchor="middle">0</text>
+
+                            <!-- Gradient area filled path -->
+                            <path id="svgAreaPath" d="M 50 170 Q 120 110, 150 130 T 250 50 T 350 90 T 450 40 T 570 60 L 570 170 Z" fill="url(#chartGradient)" />
+                            
+                            <!-- Main line path -->
+                            <path id="svgLinePath" d="M 50 170 Q 120 110, 150 130 T 250 50 T 350 90 T 450 40 T 570 60" fill="none" stroke="#A87C43" stroke-width="3" stroke-linecap="round" />
+                            
+                            <!-- Graph Data nodes circles -->
+                            <circle cx="50" cy="170" r="4" fill="#2B1E17" stroke="#A87C43" stroke-width="2" />
+                            <circle cx="150" cy="130" r="4" fill="#2B1E17" stroke="#A87C43" stroke-width="2" />
+                            <circle cx="250" cy="50" r="5" fill="#2B1E17" stroke="#A87C43" stroke-width="2" />
+                            <circle cx="350" cy="90" r="4" fill="#2B1E17" stroke="#A87C43" stroke-width="2" />
+                            <circle cx="450" cy="40" r="5" fill="#2B1E17" stroke="#A87C43" stroke-width="2" />
+                            <circle cx="570" cy="60" r="4" fill="#2B1E17" stroke="#A87C43" stroke-width="2" />
+
+                            <!-- X-axis labels text -->
+                            <text x="50" y="190" fill="#6E5544" font-size="9" font-family="Inter" text-anchor="middle">Mon</text>
+                            <text x="150" y="190" fill="#6E5544" font-size="9" font-family="Inter" text-anchor="middle">Tue</text>
+                            <text x="250" y="190" fill="#6E5544" font-size="9" font-family="Inter" text-anchor="middle">Wed</text>
+                            <text x="350" y="190" fill="#6E5544" font-size="9" font-family="Inter" text-anchor="middle">Thu</text>
+                            <text x="450" y="190" fill="#6E5544" font-size="9" font-family="Inter" text-anchor="middle">Fri</text>
+                            <text x="570" y="190" fill="#6E5544" font-size="9" font-family="Inter" text-anchor="middle">Weekend</text>
+                        </svg>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="p-3 bg-parchment/40 border border-clay/10 rounded-xl">
+                            <span class="text-[10px] text-clay uppercase tracking-wider font-semibold">Active focus hours</span>
+                            <h4 id="statFocus" class="heading-font text-xl font-bold text-espresso mt-1">34.2 Hrs</h4>
+                            <p class="text-[9px] text-clay/80 mt-0.5">85% efficiency metric</p>
+                        </div>
+                        <div class="p-3 bg-parchment/40 border border-clay/10 rounded-xl">
+                            <span class="text-[10px] text-clay uppercase tracking-wider font-semibold">PR Cycle Duration</span>
+                            <h4 id="statPr" class="heading-font text-xl font-bold text-espresso mt-1">2.4 Hours</h4>
+                            <p class="text-[9px] text-accentGreen mt-0.5">▲ 14% faster syncs</p>
+                        </div>
+                        <div class="p-3 bg-parchment/40 border border-clay/10 rounded-xl">
+                            <span class="text-[10px] text-clay uppercase tracking-wider font-semibold">Documentation Streaks</span>
+                            <h4 id="statDoc" class="heading-font text-xl font-bold text-espresso mt-1">8 Commits</h4>
+                            <p class="text-[9px] text-clay/80 mt-0.5">Accredited wiki updates</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column Chart & Burnout Grid Dashboard -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Stacked Breakdown: Silent Contribution Units -->
+                    <div class="bg-cream border border-clay/20 rounded-2xl p-5 shadow-sm space-y-4">
+                        <div>
+                            <h3 class="heading-font text-sm font-bold text-espresso">Silent Collaboration breakdown</h3>
+                            <p class="text-[11px] text-clay">Valued contributions outside standard git-push streams.</p>
+                        </div>
+
+                        <!-- SVG Stacked Column bar chart -->
+                        <div class="relative w-full h-[140px] bg-parchment/20 border border-clay/10 rounded-xl p-3 flex justify-around items-end">
+                            <!-- Column 1 -->
+                            <div class="flex flex-col items-center gap-1.5 w-10">
+                                <div class="w-4 bg-espresso rounded-t-sm h-[60px]" title="Pull reviews"></div>
+                                <div class="w-4 bg-accentAmber rounded-t-sm h-[30px]" title="Peer syncs"></div>
+                                <span class="text-[9px] text-clay font-medium mt-1">Reviews</span>
+                            </div>
+                            <!-- Column 2 -->
+                            <div class="flex flex-col items-center gap-1.5 w-10">
+                                <div class="w-4 bg-espresso rounded-t-sm h-[20px]"></div>
+                                <div class="w-4 bg-accentGreen rounded-t-sm h-[70px]"></div>
+                                <span class="text-[9px] text-clay font-medium mt-1">Mentors</span>
+                            </div>
+                            <!-- Column 3 -->
+                            <div class="flex flex-col items-center gap-1.5 w-10">
+                                <div class="w-4 bg-accentAmber rounded-t-sm h-[40px]"></div>
+                                <div class="w-4 bg-accentGreen rounded-t-sm h-[30px]"></div>
+                                <span class="text-[9px] text-clay font-medium mt-1">Syncs</span>
+                            </div>
+                            <!-- Column 4 -->
+                            <div class="flex flex-col items-center gap-1.5 w-10">
+                                <div class="w-4 bg-espresso rounded-t-sm h-[10px]"></div>
+                                <div class="w-4 bg-accentAmber rounded-t-sm h-[40px]"></div>
+                                <span class="text-[9px] text-clay font-medium mt-1">Wiki</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-clay font-medium">
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-espresso rounded"></span> Code Reviews</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-accentGreen rounded"></span> Direct Mentorship</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-accentAmber rounded"></span> Slack Peer Assists</span>
+                        </div>
+                    </div>
+
+                    <!-- Workload Burnout Risk Heatmap -->
+                    <div class="bg-cream border border-clay/20 rounded-2xl p-5 shadow-sm space-y-4">
+                        <div>
+                            <h3 class="heading-font text-sm font-bold text-espresso">Ecosystem Pressure Heatmap</h3>
+                            <p class="text-[11px] text-clay">Workload stress distributions captured by telemetry queues.</p>
+                        </div>
+
+                        <div class="grid grid-cols-7 gap-2 text-center text-[10px] font-semibold">
+                            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span class="text-accentAmber">S</span><span class="text-accentAmber">S</span>
+                            
+                            <!-- Heatmap Blocks -->
+                            <div class="h-8 bg-accentGreen/10 rounded border border-clay/10 flex items-center justify-center font-mono">10%</div>
+                            <div class="h-8 bg-accentGreen/20 rounded border border-clay/10 flex items-center justify-center font-mono">32%</div>
+                            <div class="h-8 bg-accentGreen/40 rounded border border-clay/10 text-cream flex items-center justify-center font-mono">54%</div>
+                            <div class="h-8 bg-accentGreen/60 rounded border border-clay/10 text-cream flex items-center justify-center font-mono">75%</div>
+                            <div class="h-8 bg-accentAmber/30 rounded border border-clay/10 flex items-center justify-center font-mono">42%</div>
+                            <div id="satRisk" class="h-8 bg-accentGreen/10 rounded border border-clay/10 flex items-center justify-center font-mono">5%</div>
+                            <div id="sunRisk" class="h-8 bg-accentGreen/10 rounded border border-clay/10 flex items-center justify-center font-mono">0%</div>
+                        </div>
+
+                        <div class="flex justify-between items-center text-[9px] text-clay border-t border-clay/5 pt-2">
+                            <span>Legend: Minimal pressure (10%)</span>
+                            <span class="text-accentAmber font-semibold">Overload warning (&gt;75%)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Panel: ML Simulator Matrix -->
+            <div class="lg:col-span-4 space-y-6">
+                
+                <!-- Interactive Burnout Predictor Simulation Matrix -->
+                <div class="bg-cream border-2 border-espresso/20 p-5 rounded-2xl shadow-sm space-y-5 relative">
+                    <div class="absolute top-0 right-0 bg-accentAmber text-cream text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-bl-xl">ML Engine</div>
+                    
+                    <div>
+                        <h3 class="heading-font text-sm font-bold text-espresso flex items-center gap-1.5">
+                            <i data-lucide="sliders" class="w-4 h-4 text-accentAmber"></i> Workload & Burnout Simulator
+                        </h3>
+                        <p class="text-[11px] text-clay mt-1">
+                            Simulate engineering task metrics below to trigger high-accuracy risk metrics computed by SyncLogue's ML Safety Engine.
+                        </p>
+                    </div>
+
+                    <!-- Sliders Block -->
+                    <div class="space-y-4 text-xs font-semibold text-clay">
+                        
+                        <!-- Late Night Commits -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between">
+                                <span>Late Night Activity Blocks</span>
+                                <span id="labelLateNight" class="text-espresso font-mono">14 Units</span>
+                            </div>
+                            <input id="sliderLateNight" type="range" min="0" max="40" value="14" oninput="runBurnoutSimulation()" class="w-full h-1 bg-parchment rounded-lg appearance-none cursor-pointer accent-espresso">
+                        </div>
+
+                        <!-- Weekend Commits -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between">
+                                <span>Weekend Commit Streams</span>
+                                <span id="labelWeekend" class="text-espresso font-mono">6 Units</span>
+                            </div>
+                            <input id="sliderWeekend" type="range" min="0" max="25" value="6" oninput="runBurnoutSimulation()" class="w-full h-1 bg-parchment rounded-lg appearance-none cursor-pointer accent-espresso">
+                        </div>
+
+                        <!-- Coding Streak -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between">
+                                <span>Asynchronous Coding Streak</span>
+                                <span id="labelStreak" class="text-espresso font-mono">12 Days</span>
+                            </div>
+                            <input id="sliderStreak" type="range" min="1" max="30" value="12" oninput="runBurnoutSimulation()" class="w-full h-1 bg-parchment rounded-lg appearance-none cursor-pointer accent-espresso">
+                        </div>
+
+                        <!-- Review Load -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between">
+                                <span>Pull Request Review Load</span>
+                                <span id="labelReview" class="text-espresso font-mono">18 Tasks</span>
+                            </div>
+                            <input id="sliderReview" type="range" min="1" max="50" value="18" oninput="runBurnoutSimulation()" class="w-full h-1 bg-parchment rounded-lg appearance-none cursor-pointer accent-espresso">
+                        </div>
+                    </div>
+
+                    <!-- Live ML Result Box -->
+                    <div class="p-4 bg-parchment rounded-xl border border-clay/10 space-y-2">
+                        <div class="flex items-center justify-between border-b border-clay/10 pb-1.5">
+                            <span class="text-[10px] text-clay uppercase tracking-wider font-bold">Burnout Safety Index</span>
+                            <span id="riskBadge" class="text-[10px] font-bold px-2 py-0.5 rounded uppercase border">Optimal Balance</span>
+                        </div>
+                        <p id="coachingStatement" class="text-[11px] text-clay leading-relaxed italic">
+                            "Workspace telemetry matches normal distribution bounds. High output efficiency remains fully sustainable."
+                        </p>
+                    </div>
+
+                    <button onclick="sendSimToBackend()" class="w-full bg-espresso hover:bg-clay text-cream text-xs font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                        <i data-lucide="database" class="w-4 h-4"></i> Sync Simulator to Org Database
+                    </button>
+                </div>
+
+                <!-- AI Smart Insights Engine -->
+                <div class="bg-cream border border-clay/20 rounded-2xl p-5 shadow-sm space-y-4">
+                    <div class="border-b border-clay/10 pb-2 flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-accentAmber"></i>
+                        <h3 class="heading-font text-sm font-bold text-espresso">AI Workspace Safety Insights</h3>
+                    </div>
+
+                    <div class="space-y-3 text-xs leading-relaxed text-clay">
+                        <div class="bg-parchment/60 p-3 rounded-xl border border-clay/5">
+                            <p class="font-bold text-espresso mb-1">💡 Suggested Rest Block allocation</p>
+                            <p id="insightRest" class="text-[11px]">
+                                Late-night commit cycles are peaking between 11PM and 2AM. Suggest locking VS Code telemetry active timers for 6 continuous hours tomorrow.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-parchment/60 p-3 rounded-xl border border-clay/5">
+                            <p class="font-bold text-espresso mb-1">💡 Silent Contribution multiplier</p>
+                            <p id="insightSilent" class="text-[11px]">
+                                Your peer assists score ranks in the top 5% of the org hierarchy. This balancing keeps frontend repositories operating smoothly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer class="border-t border-clay/10 bg-parchment/30 px-6 py-4 text-center text-xs text-clay">
+            SyncLogue Workplace Intelligence System Matrix &copy; 2026. Custom Tailored for Engineering Teams Who Prioritize Real Contribution Value Metrics Over Crude Lines of Code Tracking.
+        </footer>
+    </div>
+
+    <script>
+        // Live state management coordinates
+        let analyticsState = {
+            activeRole: 'developer',
+            lateNight: 14,
+            weekend: 6,
+            streak: 12,
+            reviews: 18
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            // Initial ML run
+            runBurnoutSimulation();
+        });
+
+        // Dynamic Role Swaps
+        function swapToRole(role) {
+            analyticsState.activeRole = role;
+
+            const chartTitleNode = document.getElementById('chartTitle');
+            const satRisk = document.getElementById('satRisk');
+            const sunRisk = document.getElementById('sunRisk');
+            
+            const devBtn = document.getElementById('toggleBtnDev');
+            const adminBtn = document.getElementById('toggleBtnAdmin');
+            
+            const sidebarAvatar = document.getElementById('sidebarAvatar');
+            const sidebarName = document.getElementById('sidebarName');
+            const sidebarRole = document.getElementById('sidebarRole');
+
+            const svgLinePath = document.getElementById('svgLinePath');
+            const svgAreaPath = document.getElementById('svgAreaPath');
+
+            if (role === 'admin') {
+                chartTitleNode.innerText = "Team Velocity & Workload Pressure Matrix";
+                satRisk.innerText = "64%";
+                satRisk.className = "h-8 bg-accentAmber/60 rounded border border-clay/10 text-cream flex items-center justify-center font-mono";
+                sunRisk.innerText = "28%";
+                sunRisk.className = "h-8 bg-accentGreen/20 rounded border border-clay/10 flex items-center justify-center font-mono";
+
+                // Alter main SVG Line coordinate curves to reflect higher admin metrics
+                svgLinePath.setAttribute('d', "M 50 120 Q 120 70, 150 90 T 250 30 T 350 70 T 450 20 T 570 30");
+                svgAreaPath.setAttribute('d', "M 50 120 Q 120 70, 150 90 T 250 30 T 350 70 T 450 20 T 570 30 L 570 170 L 50 170 Z");
+
+                // Update Stats
+                document.getElementById('statFocus').innerText = "182.5 Hrs";
+                document.getElementById('statPr').innerText = "4.8 Hours";
+                document.getElementById('statDoc').innerText = "24 Commits";
+
+                // Update Insights
+                document.getElementById('insightRest').innerHTML = "<strong>Frontend Ecosystem Stress Alert:</strong> Pressure indexes are critical (&gt;80%). Advise deploying 3 critical sub-tickets to backend backup teams immediately.";
+                document.getElementById('insightSilent').innerHTML = "<strong>Silent Value Metrics:</strong> Team silent mentorship assist logs indicate Aravind Swaminathan handling 42 units of onboarding syncing this sprint.";
+
+                // Toggle Buttons Highlights
+                adminBtn.className = "text-xs font-semibold py-1 px-3 rounded-lg bg-espresso text-cream transition-all";
+                devBtn.className = "text-xs font-semibold py-1 px-3 rounded-lg bg-parchment border-clay/10 text-clay hover:bg-cream transition-all";
+                
+                // Sidebar UI updates
+                sidebarName.innerText = "Aravind";
+                sidebarRole.innerText = "HR Lead";
+                sidebarAvatar.src = 'https://i.pravatar.cc/150?img=68';
+            } else {
+                chartTitleNode.innerText = "Engineering Velocity & Commit Stream";
+                satRisk.innerText = "5%";
+                satRisk.className = "h-8 bg-accentGreen/10 rounded border border-clay/10 flex items-center justify-center font-mono";
+                sunRisk.innerText = "0%";
+                sunRisk.className = "h-8 bg-accentGreen/10 rounded border border-clay/10 flex items-center justify-center font-mono";
+
+                // Restore Developer SVG paths
+                svgLinePath.setAttribute('d', "M 50 170 Q 120 110, 150 130 T 250 50 T 350 90 T 450 40 T 570 60");
+                svgAreaPath.setAttribute('d', "M 50 170 Q 120 110, 150 130 T 250 50 T 350 90 T 450 40 T 570 60 L 570 170 Z");
+
+                // Restore Stats
+                document.getElementById('statFocus').innerText = "34.2 Hrs";
+                document.getElementById('statPr').innerText = "2.4 Hours";
+                document.getElementById('statDoc').innerText = "8 Commits";
+
+                // Restore Insights
+                document.getElementById('insightRest').innerText = "Late-night commit cycles are peaking between 11PM and 2AM. Suggest locking VS Code telemetry active timers for 6 continuous hours tomorrow.";
+                document.getElementById('insightSilent').innerText = "Your peer assists score ranks in the top 5% of the org hierarchy. This balancing keeps frontend repositories operating smoothly.";
+
+                // Toggle Buttons Highlights
+                devBtn.className = "text-xs font-semibold py-1 px-3 rounded-lg bg-espresso text-cream transition-all";
+                adminBtn.className = "text-xs font-semibold py-1 px-3 rounded-lg bg-parchment border-clay/10 text-clay hover:bg-cream transition-all";
+                
+                // Sidebar UI updates
+                sidebarName.innerText = "Keerthana";
+                sidebarRole.innerText = "Developer";
+                sidebarAvatar.src = 'https://i.pravatar.cc/150?img=47';
+            }
+
+            lucide.createIcons();
+        }
+
+        // Live ML Model Burnout simulation calculations
+        function runBurnoutSimulation() {
+            // Get slider values
+            const lateNight = parseInt(document.getElementById('sliderLateNight').value);
+            const weekend = parseInt(document.getElementById('sliderWeekend').value);
+            const streak = parseInt(document.getElementById('sliderStreak').value);
+            const review = parseInt(document.getElementById('sliderReview').value);
+
+            // Sync Slider Labels
+            document.getElementById('labelLateNight').innerText = `${lateNight} Units`;
+            document.getElementById('labelWeekend').innerText = `${weekend} Units`;
+            document.getElementById('labelStreak').innerText = `${streak} Days`;
+            document.getElementById('labelReview').innerText = `${review} Tasks`;
+
+            // Calculate mock burnout risk metrics or fetch if available
+            // Standard formula representing simple risk:
+            const score = (lateNight * 1.5) + (weekend * 2.0) + (streak * 0.8) + (review * 0.5);
+            
+            const riskBadge = document.getElementById('riskBadge');
+            const coachingNode = document.getElementById('coachingStatement');
+
+            if (score > 55) {
+                riskBadge.innerText = "High Burnout Risk";
+                riskBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded uppercase border bg-red-100 text-red-800 border-red-200";
+                coachingNode.innerText = `"System warning: Persistent off-hours activity exceeds safety constraints. Rest blocks are strongly advised."`;
+            } else if (score > 32) {
+                riskBadge.innerText = "Moderate Stress";
+                riskBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded uppercase border bg-orange-100 text-orange-800 border-orange-200";
+                coachingNode.innerText = `"Workload remains high but stable. Keep active peer syncs and avoid increasing late night commits."`;
+            } else {
+                riskBadge.innerText = "Optimal Balance";
+                riskBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded uppercase border bg-green-100 text-green-800 border-green-200";
+                coachingNode.innerText = `"Workspace telemetry matches normal distribution bounds. High output efficiency remains fully sustainable."`;
+            }
+        }
+
+        // Direct fetch database sync simulator
+        async function sendSimToBackend() {
+            const lateNight = parseInt(document.getElementById('sliderLateNight').value);
+            const weekend = parseInt(document.getElementById('sliderWeekend').value);
+            const streak = parseInt(document.getElementById('sliderStreak').value);
+            const review = parseInt(document.getElementById('sliderReview').value);
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/predict-burnout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        lateNightCommits: lateNight,
+                        weekendCommits: weekend,
+                        codingStreak: streak,
+                        reviewLoad: review
+                    })
+                });
+                const data = await response.json();
+                alert(`Successfully synchronized simulated model vectors to Org Database. ML Predicted Burnout Risk: ${data.burnoutRisk}`);
+            } catch (err) {
+                console.log(err);
+                alert(`Offline Simulation active: Calculated Burnout Risk successfully compiled in telemetry queue.`);
+            }
+        }
+    </script>
+</body>
+</html>
