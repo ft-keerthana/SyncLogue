@@ -839,18 +839,27 @@ input.value = "";
 
 setTimeout(() => {
 
-    let response = "Telemetry processed successfully.";
+    let response = ""
+    const repos=parseInt(document.getElementById("metricScore").innerText)|| 0;
+    const followers =parseInt(document.getElementById("metricSilent").innerText )|| 0 ;
+    const burnout =document.getElementById("metricWorkload").innerText ;
 
     if(text.includes("productivity")) {
-        response = "Productivity metrics increased this sprint cycle.";
+        response = `Current productivity score is ${repos}.`
+    }
+    else if(text.includes("hello") || text.includes("hi")){
+        response = "Hello! Ask me about GitHub activity, productivity, or burnout risk."
+    }
+    else if(text.includes("github")) {
+        response = `GitHub metrics show ${repos} repositories and ${followers} followers.`
+
     }
 
-    if(text.includes("github")) {
-        response = "GitHub contribution patterns remain highly consistent.";
+    else if(text.includes("burnout")) {
+        response = `Current burnout prediction is ${burnout}.`
     }
-
-    if(text.includes("burnout")) {
-        response = "Burnout risk currently remains minimal.";
+    else {
+        response ="Ask me about GitHub activity, productivity, or burnout risk."
     }
 
     messages.innerHTML += `
