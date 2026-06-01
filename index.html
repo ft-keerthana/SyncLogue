@@ -172,8 +172,10 @@
         <button onclick="fetchGitHubData()">
          Fetch GitHub Data
         </button>
-
+        
         <p id="result"></p>
+
+        
 
     </div>
     <div id="authGate" class="hidden fixed inset-0 bg-espresso/40 backdrop-blur-md z-50 flex items-center justify-center p-4">
@@ -316,6 +318,15 @@
                 
                         <p class="text-[10px] text-clay/80 mt-1">
                             Burnout risk factor: Minimal
+                        </p>
+            
+                        <button onclick="predictBurnout()"
+                        style="padding:10px;background:#2B1E17;color:white;margin-top:10px;border-radius:8px;">
+                        Predict Burnout
+                        </button>
+                        <p id="burnoutResult"
+                        style="margin-top:10px;font-weight:bold;">
+    
                         </p>
                 
                     </div>
@@ -649,6 +660,74 @@ class="hidden fixed bottom-24 right-28 z-50
     </div>
 
     <script>
+        async function predictBurnout() {
+            try {
+                const repos =parseInt(document.getElementById("metricScore").innerText) || 5
+                const followers =parseInt(document.getElementById("metricSilent").innerText) || 1
+                const following =parseInt(document.getElementById("metricStreak").innerText) || 3
+                const res =await fetch(
+                    "http://127.0.0.1:8000/predict-burnout",
+                    {
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+                        body:
+                        JSON.stringify({
+                            lateNightCommits:repos,
+                            weekendCommits:Math.floor(repos/2),
+                            codingStreak:Math.min(repos*2,30),
+                            reviewLoad:Math.max(1,followers)
+                        })
+                    }
+                )
+                const data =await res.json()
+                const workload =document.getElementById("metricWorkload")
+                workload.innerText =data.burnoutRisk
+                if(data.burnoutRisk==="HIGH"){
+                    workload.style.color="red"
+                }
+
+                else if(
+                    data.burnoutRisk==="MEDIUM"
+                ){
+                    workload.style.color="orange"
+                }
+
+                else{
+                    workload.style.color="green"
+                }
+                let reason = ""
+
+                if(data.burnoutRisk==="HIGH"){
+
+                    reason ="High activity detected. Workload may need balancing."
+
+                }
+
+                else if(data.burnoutRisk==="MEDIUM"
+                ){
+
+                    reason ="Moderate workload pattern detected."
+
+                }
+
+                else{
+
+                    reason ="Healthy contribution pattern."
+
+                }
+
+                document.getElementById("burnoutResult").innerHTML =`Burnout Risk:${data.burnoutRisk}<br><br>${reason}`               
+            }
+                catch(err){
+                    console.log(err)
+                    document.getElementById("burnoutResult").innerHTML="Prediction failed"
+                }
+
+                }
+
+
 
         async function fetchGitHubData() {
 
@@ -672,7 +751,7 @@ class="hidden fixed bottom-24 right-28 z-50
 
             document.getElementById("result").innerHTML =
             `
-                Name: ${data.name} <br>
+                Name: ${data.name || data.login} <br>
                 Followers: ${data.followers} <br>
                 Public Repos: ${data.public_repos}
                 `;
